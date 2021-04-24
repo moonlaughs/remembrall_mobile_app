@@ -1,0 +1,10 @@
+# This file tracks properties of this Flutter project.
+# Used by Flutter tool to assess capabilities and perform upgrades etc.
+#
+# This file should be version controlled and should not be manually edited.
+
+version:
+  revision: fbadc5f2ba2f5166581893f178ac123f9b353cb8
+  channel: revert-76404-flutter-engine-flutter-autoroll-70a5bb13-88aa-42f7-ba5e-049c5c0de978-1613767354
+
+project_type: app
