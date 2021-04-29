@@ -18,32 +18,24 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final myUserNameController = TextEditingController();
-    final myEmailController = TextEditingController();
-    final myPasswordController = TextEditingController();
-    final myConfirmPasswordController = TextEditingController();
+  final myEmailController = TextEditingController();
+  final myPasswordController = TextEditingController();
+  final myConfirmPasswordController = TextEditingController();
+  Uri url = Uri.https('10.0.2.2:5001', '/users');
+  HttpClient client = new HttpClient();
 
-    @override
-    void dispose() {
-      // Clean up the controller when the widget is disposed.
-      myUserNameController.dispose();
-      myPasswordController.dispose();
-      myConfirmPasswordController.dispose();
-      myEmailController.dispose();
-      super.dispose();
-    }
   @override
-  Widget build(BuildContext context) {
-    double topHeight = MediaQuery.of(context).size.height * (1 / 3);
-    double buttonWidth = MediaQuery.of(context).size.width * 0.8;
-    double buttonHeight = MediaQuery.of(context).size.height * 0.075;
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myUserNameController.dispose();
+    myPasswordController.dispose();
+    myConfirmPasswordController.dispose();
+    myEmailController.dispose();
+    super.dispose();
+  }
 
-    GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
-    
-
-    Future<User> register() async {
-      Uri url = Uri.https('10.0.2.2:5001', '/users');
-      HttpClient client = new HttpClient();
+  Future<User> register(BuildContext context) async {
+    try {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
 
@@ -56,7 +48,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           myEmail == null ||
           myPass == null ||
           myConfPass == null) {
-        print('fill up requred fields');
+        _showDialog(context,
+            'Please fill up required information in order to register');
       } else {
         if (myPass == myConfPass) {
           if (myEmail.contains('@')) {
@@ -68,18 +61,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
             request.add(utf8.encode(json.encode(map)));
 
             HttpClientResponse response = await request.close();
-
             String reply = await response.transform(utf8.decoder).join();
 
-            print(reply);
+            if (response.statusCode == 201) {
+              print(reply);
+            } else {
+              print(reply);
+              // "You can only use letters and numbers!" => username and between 3 and 30
+              // "The password should contain at least one letter and one number!" => and between 6 and 100
+              _showDialog(context,
+                  'Something went wrong, password needs to contain at least one letter and number');
+            }
           } else {
-            print('invalid email');
+            _showDialog(context, 'Invalid email address');
           }
         } else {
-          print('passwords do not match');
+          _showDialog(context, 'Passwords do not match');
         }
       }
+    } catch (e) {
+      print(e);
+      _showDialog(context,
+          'Something went wrong, please check your network connection');
     }
+  }
+
+  Future<void> _showDialog(BuildContext context, String dialogMessage) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(dialogMessage),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Ok"),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double topHeight = MediaQuery.of(context).size.height * (1 / 3);
+    double buttonWidth = MediaQuery.of(context).size.width * 0.8;
+    double buttonHeight = MediaQuery.of(context).size.height * 0.075;
+
+    GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Center(
@@ -183,6 +218,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'Username'),
                                 validator: MultiValidator([
                                   RequiredValidator(errorText: "* Required"),
+                                  PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
+                                      errorText:
+                                          'only and minimum one of letters and numbers')
 
                                   // EmailValidator(errorText: "Enter valid email id"), //this should be only used when email
                                 ])),
@@ -240,7 +278,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   MaxLengthValidator(30,
                                       errorText:
                                           "Password should not be greater than 30 characters"),
-                                          // needs to have at least one letter and one number
+                                  PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
+                                      errorText:
+                                          'must contain at least one letter and one number')
+                                  // needs to have at least one letter and one number
                                   // PatternValidator(r'(?=.*?[#?!@$%^&*-])',
                                   //     errorText:
                                   //         'password must have at least one special character')
@@ -270,6 +311,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'Confirm Password'),
                                 validator: MultiValidator([
                                   RequiredValidator(errorText: "* Required"),
+                                  MinLengthValidator(6,
+                                      errorText:
+                                          "Password should be atleast 6 characters"),
+                                  MaxLengthValidator(30,
+                                      errorText:
+                                          "Password should not be greater than 30 characters"),
+                                  PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
+                                      errorText:
+                                          'must contain at least one letter and one number')
                                   // MinLengthValidator(6,
                                   //     errorText:
                                   //         "Password should be atleast 6 characters"),
@@ -295,7 +345,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       new Positioned(
                           child: GestureDetector(
                             onTap: () {
-                              register();
+                              register(context);
                               // GlobalKey<FormState> formkey = GlobalKey<FormState>();
                               // if (this.formKey.currentState.validate()) {
                               //   print("Validated");

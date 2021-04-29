@@ -9,6 +9,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 ///for field validation
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:to_do_application/Models/token.dart';
 
 ///model classes used in this widget
 import 'package:to_do_application/Models/user.dart';
@@ -21,6 +22,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final myUserNameController = TextEditingController();
   final myPasswordController = TextEditingController();
+  Uri url = Uri.https('10.0.2.2:5001', '/users/authenticate');
+  HttpClient client = new HttpClient();
 
   @override
   void dispose() {
@@ -30,78 +33,70 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<User> login() async {
-    Uri url = Uri.https('10.0.2.2:5001', '/users/authenticate');
-    // print(url.toString());
-    // final response = await http.get(url);
-    // print(response.statusCode);
-    // if(response.statusCode == 200){
-    //   return Book.fromJson(jsonDecode(response.body));
-    // } else {
-    //   throw Exception('Failed to load the book');
-    // }
-    //   final response = await http.get(
-    //   url,
-    //   // encoding: Utf8Codec(),
-    //   headers: <String, String>{
-    //     'Content-Type': 'application/json; charset=UTF-8',
-    //     'Accept': "*/*",
-    //     'connection': 'keep-alive',
-    //     'Accept-Encoding' : 'gzip, deflate, br',
-    //   },
-    //   // body: body,
-    // );
-    // if(response.statusCode == 200){
-    //   return Book.fromJson(jsonDecode(response.body));
-    // } else {
-    //   throw Exception('Failed to load the book');
-    // }
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
+  Future<User> login(BuildContext context) async {
+    try {
+      client.badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
 
-// String url ='xyz@xyz.com';
-    String myLogin = myUserNameController.text;
-    String myPass = myPasswordController.text;
-    Map map;
-    if(myLogin == null || myPass == null){
-      showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          // Retrieve the text the user has entered by using the
-          // TextEditingController.
-          content: Text('Please fill up required information in order to login'),
-        );
-      },
-    );
-    } else {
-if (myLogin.contains('@')) {
-      map = {"username": "123456", "email": myLogin, "password": myPass};
-    } else {
-      map = {"username": myLogin, "email": "mail@example.com", "password": myPass};
+      String myLogin = myUserNameController.text;
+      String myPass = myPasswordController.text;
+      Map map;
+      if (myLogin == null || myPass == null) {
+        _showDialog(
+            context, 'Please fill up required information in order to login');
+      } else {
+        if (myLogin.contains('@')) {
+          map = {"login": myLogin, "password": myPass};
+        } else {
+          map = {"login": myLogin, "password": myPass};
+        }
+      }
+
+      HttpClientRequest request = await client.postUrl(url);
+
+      request.headers.set('content-type', 'application/json');
+
+      request.add(utf8.encode(json.encode(map)));
+
+      HttpClientResponse response = await request.close();
+
+      if (response.statusCode == 200) {
+        String receivedString = await response.transform(utf8.decoder).join();
+
+        var myJson = json.decode(receivedString);
+
+        Token myToken = Token.fromJson(myJson);
+        print(myToken.createdToken);
+      } else {
+        _showDialog(context, 'Something went wrong, please Try again');
+      }
+    } catch (e) {
+      print(e);
+      _showDialog(context,
+          'Something went wrong, please check your network connection');
     }
-    }
-    
-    print(map);
+  }
 
-// Map map = {
-//   "username": "Iza",
-//   "email": "iza@mail.com",
-//   "password": "Pass123"
-// };
-
-    HttpClientRequest request = await client.postUrl(url);
-
-    request.headers.set('content-type', 'application/json');
-
-    request.add(utf8.encode(json.encode(map)));
-
-    HttpClientResponse response = await request.close();
-
-    String reply = await response.transform(utf8.decoder).join();
-
-    print(reply);
+  Future<void> _showDialog(BuildContext context, String dialogMessage) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(dialogMessage),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Ok"),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -216,8 +211,7 @@ if (myLogin.contains('@')) {
                                   RequiredValidator(errorText: "* Required"),
 
                                   // EmailValidator(errorText: "Enter valid email id"),
-                                ])
-                                ),
+                                ])),
                           ),
                           // TextField(
                           //   decoration: InputDecoration(
@@ -265,7 +259,7 @@ if (myLogin.contains('@')) {
                           child: GestureDetector(
                             onTap: () {
                               // fetchAlbum();
-                              login();
+                              login(context);
                               // fetchAllDataFromServer();
                               // GlobalKey<FormState> formkey = GlobalKey<FormState>();
                               // if (this.formKey.currentState.validate()) {
