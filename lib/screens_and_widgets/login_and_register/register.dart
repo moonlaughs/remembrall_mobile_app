@@ -9,7 +9,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 ///for field validation
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:to_do_application/Models/user.dart';
+// import 'package:to_do_application/Models/user.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -34,7 +34,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  Future<User> register(BuildContext context) async {
+  // Future<User>
+  register(BuildContext context) async {
     try {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -65,6 +66,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             if (response.statusCode == 201) {
               print(reply);
+
+              Navigator.pushNamed(context, '/homeScreen');
             } else {
               print(reply);
               // "You can only use letters and numbers!" => username and between 3 and 30
@@ -114,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     double buttonWidth = MediaQuery.of(context).size.width * 0.8;
     double buttonHeight = MediaQuery.of(context).size.height * 0.075;
 
-    GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    // GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Center(

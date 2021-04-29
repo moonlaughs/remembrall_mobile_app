@@ -10,9 +10,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 ///for field validation
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:to_do_application/Models/token.dart';
+import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
+import 'package:localstorage/localstorage.dart';
 
 ///model classes used in this widget
-import 'package:to_do_application/Models/user.dart';
+// import 'package:to_do_application/Models/user.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -24,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final myPasswordController = TextEditingController();
   Uri url = Uri.https('10.0.2.2:5001', '/users/authenticate');
   HttpClient client = new HttpClient();
+  LocalStorage myStorage = LocalStorageHelper().getInstance();
 
   @override
   void dispose() {
@@ -33,7 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<User> login(BuildContext context) async {
+  // Future<User>
+  login(BuildContext context) async {
     try {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
@@ -66,7 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
         var myJson = json.decode(receivedString);
 
         Token myToken = Token.fromJson(myJson);
-        print(myToken.createdToken);
+        print('created: ' + myToken.createdToken);
+
+        myStorage.setItem('token', myToken.createdToken);
+        print('saved: ' + myStorage.getItem('token'));
+        Navigator.pushNamed(context, '/homeScreen');
       } else {
         _showDialog(context, 'Something went wrong, please Try again');
       }
