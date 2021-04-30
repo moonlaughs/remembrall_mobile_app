@@ -13,7 +13,6 @@
     or you can just on the right bottom side in VSCode click 'No device' or the name of the device if you already have one there and run it
   2. run the app: flutter run --enable-software-rendering
 
-A new Flutter project.
 
 
 ## Getting Started
