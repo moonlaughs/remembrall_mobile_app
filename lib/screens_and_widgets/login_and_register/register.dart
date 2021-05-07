@@ -9,6 +9,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 ///for field validation
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:to_do_application/Models/token.dart';
+import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
 // import 'package:to_do_application/Models/user.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -23,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final myConfirmPasswordController = TextEditingController();
   Uri url = Uri.https('10.0.2.2:5001', '/users');
   HttpClient client = new HttpClient();
+  LocalStorage myStorage = LocalStorageHelper().getInstance();
 
   @override
   void dispose() {
@@ -64,9 +68,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             HttpClientResponse response = await request.close();
             String reply = await response.transform(utf8.decoder).join();
 
-            if (response.statusCode == 201) {
+            if (response.statusCode == 201 || response.statusCode == 200) {
               print(reply);
+// String receivedString = await response.transform(utf8.decoder).join();
 
+              var myJson = json.decode(reply);
+
+              Token myToken = Token.fromJson(myJson);
+              print('created: ' + myToken.createdToken);
+
+              myStorage.setItem('token', myToken.createdToken);
+              print('saved: ' + myStorage.getItem('token'));
               Navigator.pushNamed(context, '/homeScreen');
             } else {
               print(reply);
@@ -278,12 +290,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   MinLengthValidator(6,
                                       errorText:
                                           "Password should be atleast 6 characters"),
-                                  MaxLengthValidator(30,
+                                  MaxLengthValidator(40,
                                       errorText:
                                           "Password should not be greater than 30 characters"),
-                                  PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
-                                      errorText:
-                                          'must contain at least one letter and one number')
+                                  // PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
+                                  //     errorText:
+                                  //         'must contain at least one letter and one number')
                                   // needs to have at least one letter and one number
                                   // PatternValidator(r'(?=.*?[#?!@$%^&*-])',
                                   //     errorText:
@@ -317,12 +329,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   MinLengthValidator(6,
                                       errorText:
                                           "Password should be atleast 6 characters"),
-                                  MaxLengthValidator(30,
+                                  MaxLengthValidator(40,
                                       errorText:
                                           "Password should not be greater than 30 characters"),
-                                  PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
-                                      errorText:
-                                          'must contain at least one letter and one number')
+                                  // PatternValidator(r'(^(?:.*[A-Za-z0-9])$)',
+                                  //     errorText:
+                                  //         'must contain at least one letter and one number')
                                   // MinLengthValidator(6,
                                   //     errorText:
                                   //         "Password should be atleast 6 characters"),
