@@ -18,31 +18,51 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
   @override
   Widget build(BuildContext context){
     return AppBar(
-      title: Center(
-        child: AutoSizeText(
-          title,
-          style:  TextStyle(color: Colors.black),
-          maxLines: 1,
-        ),
-      ),
-      backgroundColor: Colors.white,
+      // title: Center(
+      //   child: AutoSizeText(
+      //     title,
+      //     style:  TextStyle(color: Colors.black),
+      //     maxLines: 1,
+      //   ),
+      // ),
+      backgroundColor: Colors.cyan,
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 10.0),
           child: GestureDetector(
             onTap: () {
+              Navigator.pushNamed(context, '/userProfile');
               // if(myStorage.getItem('processItem') != null){
               //   Navigator.of(context).pushNamedAndRemoveUntil('/chosenFaceScreen', (Route<dynamic> route) => false);
               // } else {
               //   Navigator.of(context).pushNamedAndRemoveUntil('/mainScreen', (Route<dynamic> route) => false);
               // }
             },
-            child: Image.asset('assets/otherImages/girl.png', scale: 1.5),
+            child: Row(
+              children: [
+                Text('Jane Doe'),
+                Padding(padding: EdgeInsets.only(right: 8)),
+                Container(
+                        width: 40.0,
+                        height: 40.0,
+                        decoration: new BoxDecoration(
+                          color: Colors.white,
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: new AssetImage('assets/otherImages/girl.png',) 
+                                // new NetworkImage(
+                                //     "https://i.imgur.com/BoN9kdC.png")
+                            )
+                        )),
+              ],
+            ),
+            // child: Image.asset('assets/otherImages/girl.png', scale: 1.5),
           )
         )
       ],
       automaticallyImplyLeading: true,
-      iconTheme: IconThemeData(color: Colors.black),
+      iconTheme: IconThemeData(color: Colors.white),
     );
   }
 }

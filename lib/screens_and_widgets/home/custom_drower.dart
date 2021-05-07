@@ -10,103 +10,194 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 44,
-                  minHeight: 44,
-                  maxWidth: 44,
-                  maxHeight: 44,
-                ),
-                child: Icon(
-                  Icons.settings,
-                  color: Colors.white,
-                ),
+    return Theme(
+      data: Theme.of(context).copyWith(
+                 canvasColor: Colors.cyan,//.withOpacity(0.2), //This will change the drawer background to blue.
+                 //other styles
               ),
-              AutoSizeText(
-                'Settings',
-                // tr('txt_settings'),
-                style: TextStyle(fontSize: 20, color: Colors.white),
-                maxLines: 1,
+              child: Drawer(
+          child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          // DrawerHeader(
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     children: [
+          //       ConstrainedBox(
+          //         constraints: BoxConstraints(
+          //           minWidth: 44,
+          //           minHeight: 44,
+          //           maxWidth: 44,
+          //           maxHeight: 44,
+          //         ),
+          //         // child: Icon(
+          //         //   Icons.settings,
+          //         //   color: Colors.white,
+          //         // ),
+          //       ),
+          //       // AutoSizeText(
+          //       //   'Settings',
+          //       //   // tr('txt_settings'),
+          //       //   style: TextStyle(fontSize: 20, color: Colors.white),
+          //       //   maxLines: 1,
+          //       // ),
+          //     ],
+          //   ), //'Settings'),
+          //   // decoration: BoxDecoration(
+          //   //   color: Colors.cyan.withOpacity(0.2) //Colors.lightBlue[400],
+          //   // ),
+          // ),
+          Padding(padding: EdgeInsets.only(top: 150)),
+          ListTile(
+            title: AutoSizeText(
+              'Home',
+              // tr('txt_home'),
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
               ),
-            ],
-          ), //'Settings'),
-          decoration: BoxDecoration(
-            color: Colors.lightBlue[400],
-          ),
-        ),
-        ListTile(
-          title: AutoSizeText(
-            'Home',
-            // tr('txt_home'),
-            style: TextStyle(fontSize: 20),
-            maxLines: 1,
-          ),
-          leading: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 44,
-              minHeight: 44,
-              maxWidth: 44,
-              maxHeight: 44,
+              child: Icon(Icons.home,  color: Colors.white),
+              
             ),
-            child: Icon(Icons.home),
+            
+            onTap: () {
+              Navigator.pushNamed(context, '/homeScreen');
+              // if(myStorage.getItem('processItem') != null){
+              //     Navigator.of(context).pushNamedAndRemoveUntil('/chosenFaceScreen', (Route<dynamic> route) => false);
+              //   } else {
+              //     Navigator.of(context).pushNamedAndRemoveUntil('/mainScreen', (Route<dynamic> route) => false);
+              //   }
+            },
           ),
-          onTap: () {
-            // if(myStorage.getItem('processItem') != null){
-            //     Navigator.of(context).pushNamedAndRemoveUntil('/chosenFaceScreen', (Route<dynamic> route) => false);
-            //   } else {
-            //     Navigator.of(context).pushNamedAndRemoveUntil('/mainScreen', (Route<dynamic> route) => false);
-            //   }
-          },
-        ),
-        ListTile(
-          title: AutoSizeText(
-            'ToDos',
-            // tr('txt_stats'),
-            style: TextStyle(fontSize: 20),
-            maxLines: 1,
-          ),
-          leading: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 44,
-              minHeight: 44,
-              maxWidth: 44,
-              maxHeight: 44,
+          ListTile(
+            title: AutoSizeText(
+              'Today',
+              // tr('txt_stats'),
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              maxLines: 1,
             ),
-            child: Icon(Icons.show_chart_rounded),
-          ),
-          onTap: () {
-            // Navigator.pushNamed(context, '/statistics');
-          },
-        ),
-        ListTile(
-          title: AutoSizeText(
-            'Profile',
-            // tr('txt_change_language'),
-            style: TextStyle(fontSize: 20),
-            maxLines: 1,
-          ),
-          leading: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 44,
-              minHeight: 44,
-              maxWidth: 44,
-              maxHeight: 44,
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.today_outlined, color: Colors.white),
             ),
-            child: Icon(Icons.translate),
+            onTap: () {
+              // Navigator.pushNamed(context, '/statistics');
+            },
           ),
-          onTap: () {
-            // Navigator.pushNamed(context, '/changeLanguage');
-          },
-        ),
-      ],
-    ));
+          ListTile(
+            title: AutoSizeText(
+              'This week',
+              // tr('txt_stats'),
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.calendar_today_outlined, color: Colors.white),
+            ),
+            onTap: () {
+              // Navigator.pushNamed(context, '/statistics');
+            },
+          ),
+          ListTile(
+            title: AutoSizeText(
+              'This month',
+              // tr('txt_stats'),
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.calendar_today_outlined, color: Colors.white),
+            ),
+            onTap: () {
+              // Navigator.pushNamed(context, '/statistics');
+            },
+          ),
+          ListTile(
+            title: AutoSizeText(
+              'This year',
+              // tr('txt_stats'),
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.calendar_today_outlined, color: Colors.white),
+            ),
+            onTap: () {
+              // Navigator.pushNamed(context, '/statistics');
+            },
+          ),
+          ListTile(
+            title: AutoSizeText(
+              'All',
+              // tr('txt_stats'),
+              style: TextStyle(fontSize: 20, color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.list, color: Colors.white),
+            ),
+            onTap: () {
+              // Navigator.pushNamed(context, '/statistics');
+            },
+          ),
+          ListTile(
+            title: AutoSizeText(
+              'Profile',
+              // tr('txt_change_language'),
+              style: TextStyle(fontSize: 20,  color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.account_circle_outlined,  color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/userProfile');
+              // Navigator.pushNamed(context, '/changeLanguage');
+            },
+          ),
+        ],
+      )),
+    );
   }
 }

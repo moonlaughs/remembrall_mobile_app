@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Image.asset(
-                          "assets/logo/todoapptemporarylogo.jpg",
+                          "assets/otherImages/girl.png",
                           height: 300,
                           width: 300,
                         ),
