@@ -1,7 +1,7 @@
 import 'package:flutter_guid/flutter_guid.dart';
 
 class User {
-  Guid id;
+  String id;
   String username;
   String email;
   String password;
@@ -10,7 +10,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['id'], //?? 0
+        id: json['id'], 
         username: json['username'],
         email: json['email'],
         password: json['password']);

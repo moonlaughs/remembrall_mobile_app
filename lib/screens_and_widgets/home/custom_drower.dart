@@ -75,6 +75,8 @@ class CustomDrawer extends StatelessWidget {
               //   }
             },
           ),
+          
+          Padding(padding: EdgeInsets.only(top: 90)),
           ListTile(
             title: AutoSizeText(
               'Today',
@@ -175,6 +177,7 @@ class CustomDrawer extends StatelessWidget {
               // Navigator.pushNamed(context, '/statistics');
             },
           ),
+          Padding(padding: EdgeInsets.only(top: 90)),
           ListTile(
             title: AutoSizeText(
               'Profile',
@@ -193,6 +196,27 @@ class CustomDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pushNamed(context, '/userProfile');
+              // Navigator.pushNamed(context, '/changeLanguage');
+            },
+          ),
+          ListTile(
+            title: AutoSizeText(
+              'Log Out',
+              // tr('txt_change_language'),
+              style: TextStyle(fontSize: 20,  color: Colors.white),
+              maxLines: 1,
+            ),
+            leading: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 44,
+                minHeight: 44,
+                maxWidth: 44,
+                maxHeight: 44,
+              ),
+              child: Icon(Icons.logout,  color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamedAndRemoveUntil('/loginScreen', (Route<dynamic> route) => false);
               // Navigator.pushNamed(context, '/changeLanguage');
             },
           ),
