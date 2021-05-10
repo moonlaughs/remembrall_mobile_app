@@ -24,4 +24,6 @@ class MyTask {
         fkUserId: json['fkUserId'],
         );
   }
+
+  Map<String, dynamic> toJson() => {'id':id, 'description':description, 'date':date, 'time': time, 'location': location, 'priority': priority, 'fkTagId': fkTagId, 'fkUserId': fkUserId};
 }

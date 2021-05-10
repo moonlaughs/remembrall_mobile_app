@@ -11,4 +11,6 @@ class Constants{
   static String USER_PROFILE_SCREEN='/userProfile';
   // ignore: non_constant_identifier_names
   static String CREATE_TASK_SCREEN='/createTask';
+  // ignore: non_constant_identifier_names
+  static String UPDATE_TASK_SCREEN='/updateTask';
 }

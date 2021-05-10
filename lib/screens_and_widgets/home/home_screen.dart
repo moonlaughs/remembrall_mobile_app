@@ -60,6 +60,23 @@ class _HomeScreen extends State<HomeScreen> {
     }
   }
 
+  deleteToDo(String taskId) async {
+    try {
+      url = Uri.https('10.0.2.2:5001', '/todos/$taskId');
+      client.badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+      HttpClientRequest request = await client.deleteUrl(url);
+
+      HttpClientResponse response = await request.close();
+      print(response.statusCode); //204
+      setState(() {
+              myFutureItems = getToDos();
+            });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
@@ -150,7 +167,7 @@ class _HomeScreen extends State<HomeScreen> {
           case ConnectionState.done:
           List<Widget> myWidgets = [];
           snapshot.data.forEach((item){
-            myWidgets.add(_buildTask(context, Colors.pink, item));
+            myWidgets.add(_buildTask(context, Colors.pink, item, snapshot.data.indexOf(item)));
           });
           return Column(
             children: myWidgets,
@@ -182,12 +199,58 @@ class _HomeScreen extends State<HomeScreen> {
       });
     
   }
-  Widget _buildTask(BuildContext context, Color tagColor, MyTask myTask) {
-    //here redo the widget ==================================================================================
-    return GestureDetector(
-      onTap: () {
-        // print('task');
+  Widget _buildTask(BuildContext context, Color tagColor, MyTask myTask, int index) {
+    return Dismissible(
+      key: Key(myTask.id),
+      onDismissed: (direction){
+        setState(() {
+                  myTasks.removeAt(index);
+                });
       },
+      confirmDismiss: (direction) async {
+        if(direction == DismissDirection.startToEnd){
+          final bool res = await showDialog(
+            context: context,
+            builder: (BuildContext context){
+              return AlertDialog(
+                content: Text('Are you sure you want to delete ${myTask.description}?'),
+                actions: <Widget>[
+                  TextButton(
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.black),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(
+                  "Delete",
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  deleteToDo(myTask.id);
+                  setState(() {
+                    myTasks.removeAt(index);
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+                ],
+              );
+            }
+          );
+          return res;
+        } else {
+          print(myTask.id);
+          myStorage.setItem('taskToUpdate', myTask.toJson());
+          Navigator.pushNamed(context, Constants.UPDATE_TASK_SCREEN);
+          return null;
+        }
+      },
+      background: slideRightBackground(),//Container(color: Colors.red,),
+      secondaryBackground: slideLeftBackground(),//Container(color: Colors.green),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: Stack(children: [
@@ -299,6 +362,69 @@ class _HomeScreen extends State<HomeScreen> {
       ),
     );
   }
+  Widget slideLeftBackground() {
+  return Container(
+    color: Colors.green,
+    child: Padding(
+      padding: const EdgeInsets.only(right: 10.0),
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            Text(
+              " Edit",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
+      ),
+    ),
+  );
+}
+
+  Widget slideRightBackground() {
+  return Container(
+    color: Colors.red,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            Text(
+              " Delete",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+    ),
+  );
+}
 
   Widget _buildProgressBar(BuildContext context) {
     return Container(

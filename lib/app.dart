@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_application/screens_and_widgets/home/home_screen.dart';
 import 'package:to_do_application/screens_and_widgets/tasks/task_create.dart';
+import 'package:to_do_application/screens_and_widgets/tasks/task_update.dart';
 import 'package:to_do_application/screens_and_widgets/user_profile/user_profile.dart';
 
 ///Widgets used in this class
@@ -35,6 +36,7 @@ class _AppState extends State<App> {
           Constants.HOME_SCREEN: (context) => HomeScreen(),
           Constants.USER_PROFILE_SCREEN: (context) => UserProfilePage(),
           Constants.CREATE_TASK_SCREEN: (context) => TaskCreateScreen(),
+          Constants.UPDATE_TASK_SCREEN: (context) => TaskUpdateScreen(),
         });
   }
 }
