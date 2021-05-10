@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 ///package to use Timer
 import 'dart:async';
 
+import 'package:to_do_application/constants.dart';
+
 /// this is a splash screen that goes off in the very beginning and give time to load/initialize the DB
 class SplashScreen extends StatefulWidget {
   final TextStyle styleTextUnderTheLoader = TextStyle(
@@ -30,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
-    Navigator.pushNamed(context, '/loginScreen');
+    Navigator.pushNamed(context, Constants.LOGIN_SCREEN);
   }
 
   @override

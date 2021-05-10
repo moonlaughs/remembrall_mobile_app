@@ -11,6 +11,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:to_do_application/Models/token.dart';
+import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
 // import 'package:to_do_application/Models/user.dart';
 
@@ -79,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               myStorage.setItem('token', myToken.createdToken);
               print('saved: ' + myStorage.getItem('token'));
-              Navigator.pushNamed(context, '/homeScreen');
+              Navigator.pushNamed(context, Constants.HOME_SCREEN);
             } else {
               print(reply);
               // "You can only use letters and numbers!" => username and between 3 and 30
@@ -208,7 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       new Positioned(
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/loginScreen');
+                              Navigator.pushNamed(context, Constants.LOGIN_SCREEN);
                             },
                             child: AutoSizeText('Log in',
                                 style: TextStyle(

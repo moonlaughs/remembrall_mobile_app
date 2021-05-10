@@ -1,19 +1,19 @@
 import 'package:flutter_guid/flutter_guid.dart';
 
-class Task {
-  Guid id;
+class MyTask {
+  String id;
   String description;
-  DateTime date;
-  DateTime time;
+  String date;
+  String time;
   String location;
   int priority;
-  Guid fkTagId;
-  Guid fkUserId;
+  String fkTagId;
+  String fkUserId;
 
-  Task({this.id, this.description, this.date, this.time, this.location, this.priority, this.fkTagId, this.fkUserId});
+  MyTask({this.id, this.description, this.date, this.time, this.location, this.priority, this.fkTagId, this.fkUserId});
 
-  factory Task.fromJson(Map<String, dynamic> json) {
-    return Task(
+  factory MyTask.fromJson(Map<String, dynamic> json) {
+    return MyTask(
         id: json['id'], 
         description: json['description'],
         date: json['date'],

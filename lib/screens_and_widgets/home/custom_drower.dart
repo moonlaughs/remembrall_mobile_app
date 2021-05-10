@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
 
 ///Widget that allowed me to have a fully customizable App Bar at the top of the screens
@@ -67,7 +68,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             
             onTap: () {
-              Navigator.pushNamed(context, '/homeScreen');
+              Navigator.pushNamed(context, Constants.HOME_SCREEN);
               // if(myStorage.getItem('processItem') != null){
               //     Navigator.of(context).pushNamedAndRemoveUntil('/chosenFaceScreen', (Route<dynamic> route) => false);
               //   } else {
@@ -195,7 +196,7 @@ class CustomDrawer extends StatelessWidget {
               child: Icon(Icons.account_circle_outlined,  color: Colors.white),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/userProfile');
+              Navigator.pushNamed(context, Constants.USER_PROFILE_SCREEN);
               // Navigator.pushNamed(context, '/changeLanguage');
             },
           ),
@@ -216,7 +217,7 @@ class CustomDrawer extends StatelessWidget {
               child: Icon(Icons.logout,  color: Colors.white),
             ),
             onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil('/loginScreen', (Route<dynamic> route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(Constants.LOGIN_SCREEN, (Route<dynamic> route) => false);
               // Navigator.pushNamed(context, '/changeLanguage');
             },
           ),

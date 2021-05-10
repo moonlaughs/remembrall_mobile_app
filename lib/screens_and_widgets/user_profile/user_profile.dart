@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
 import 'package:to_do_application/models/decodedToken.dart';
 import 'package:to_do_application/models/user.dart';
@@ -359,7 +360,7 @@ request.headers.set('content-type', 'application/json');
                     Padding(padding: EdgeInsets.only(top:20)),
                     GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil('/loginScreen', (Route<dynamic> route) => false);
+                            Navigator.of(context).pushNamedAndRemoveUntil(Constants.LOGIN_SCREEN, (Route<dynamic> route) => false);
                           },
                           child: Container(
                             width: buttonWidth,

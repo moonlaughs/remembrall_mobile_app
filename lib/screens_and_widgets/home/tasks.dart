@@ -14,12 +14,12 @@ import 'package:to_do_application/models/task.dart';
 import 'custom_app_bar.dart';
 import 'custom_drower.dart';
 
-class HomeScreen extends StatefulWidget {
+class TasksScreen extends StatefulWidget {
   @override
-  _HomeScreen createState() => _HomeScreen();
+  _TasksScreenState createState() => _TasksScreenState();
 }
 
-class _HomeScreen extends State<HomeScreen> {
+class _TasksScreenState extends State<TasksScreen> {
   HttpClient client = new HttpClient();
   LocalStorage myStorage = LocalStorageHelper().getInstance();
   var myUserId;
