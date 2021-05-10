@@ -1,7 +1,6 @@
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
 import 'package:to_do_application/screens_and_widgets/home/home_screen.dart';
-import 'package:to_do_application/screens_and_widgets/home/tasks.dart';
 import 'package:to_do_application/screens_and_widgets/tasks/task_create.dart';
 import 'package:to_do_application/screens_and_widgets/user_profile/user_profile.dart';
 

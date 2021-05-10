@@ -1,7 +1,7 @@
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';  
 import 'package:localstorage/localstorage.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+// import 'package:auto_size_text/auto_size_text.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
 
 ///Widget that allowed me to have a fully customizable App Bar at the top of the screens

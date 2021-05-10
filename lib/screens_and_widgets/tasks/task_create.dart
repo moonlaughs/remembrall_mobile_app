@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:to_do_application/Models/user.dart';
+// import 'package:to_do_application/Models/user.dart';
 import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
 import 'package:to_do_application/models/decodedToken.dart';
@@ -32,7 +32,6 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUser();
   }
@@ -104,10 +103,10 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       String myDescription = myDescriptionController.text;
-      String myDate = myDateController.text;
-      String myTime = myTimeController.text;
+      // String myDate = myDateController.text;
+      // String myTime = myTimeController.text;
       String myLocation = myLocationController.text;
-      String myPriority = myPriorityController.text;
+      // String myPriority = myPriorityController.text;
       String myTag = myTagController.text;
       int priority = 1; // nneds to be adapted to 0
 

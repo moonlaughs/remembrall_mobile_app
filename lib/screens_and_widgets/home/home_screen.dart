@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// import 'package:auto_size_text/auto_size_text.dart';
 
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
-import 'package:to_do_application/models/decodedToken.dart';
+// import 'package:to_do_application/models/decodedToken.dart';
 import 'package:to_do_application/models/task.dart';
 
 import 'custom_app_bar.dart';

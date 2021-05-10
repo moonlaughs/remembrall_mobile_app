@@ -31,7 +31,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   void initState() {
-      // TODO: implement initState
       super.initState();
       getUser();
     }
