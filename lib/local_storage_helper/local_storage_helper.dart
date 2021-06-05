@@ -9,7 +9,7 @@ class LocalStorageHelper {
   LocalStorageHelper._internal();
   static LocalStorage _myLocalStorageInstance;
 
-  LocalStorage getInstance() {
+  LocalStorage getInstance(){
     if (_myLocalStorageInstance == null) {
       _myLocalStorageInstance = new LocalStorage('RemembrallStorage');
     }

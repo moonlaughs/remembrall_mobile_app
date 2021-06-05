@@ -1,29 +1,27 @@
-// import 'package:flutter_guid/flutter_guid.dart';
-
 class MyTask {
   String id;
   String description;
-  String date;
-  String time;
+  String dateTime;
   String location;
+  bool done;
   int priority;
   String fkTagId;
   String fkUserId;
 
-  MyTask({this.id, this.description, this.date, this.time, this.location, this.priority, this.fkTagId, this.fkUserId});
+  MyTask({this.id, this.description, this.dateTime,this.location, this.done, this.priority, this.fkTagId, this.fkUserId});
 
   factory MyTask.fromJson(Map<String, dynamic> json) {
     return MyTask(
         id: json['id'], 
         description: json['description'],
-        date: json['date'],
-        time: json['time'],
+        dateTime: json['dateTime'],
         location: json['location'],
         priority: json['priority'],
+        done: json['done'],
         fkTagId: json['fkTagId'],
         fkUserId: json['fkUserId'],
         );
   }
 
-  Map<String, dynamic> toJson() => {'id':id, 'description':description, 'date':date, 'time': time, 'location': location, 'priority': priority, 'fkTagId': fkTagId, 'fkUserId': fkUserId};
+  Map<String, dynamic> toJson() => {'id':id, 'description':description, 'dateTime':dateTime,'location': location, 'priority': priority, 'done': done, 'fkTagId': fkTagId, 'fkUserId': fkUserId};
 }

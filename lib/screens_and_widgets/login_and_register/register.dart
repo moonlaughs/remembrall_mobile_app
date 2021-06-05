@@ -58,7 +58,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             'Please fill up required information in order to register');
       } else {
         if (myPass == myConfPass) {
+          print('passwords match');
           if (myEmail.contains('@')) {
+            print('email contains @');
             map = {"username": myLogin, "email": myEmail, "password": myPass};
             HttpClientRequest request = await client.postUrl(url);
 
@@ -70,23 +72,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
             String reply = await response.transform(utf8.decoder).join();
 
             if (response.statusCode == 201 || response.statusCode == 200) {
+              print('status code: ${response.statusCode}');
               print(reply);
+
 // String receivedString = await response.transform(utf8.decoder).join();
 
-              var myJson = json.decode(reply);
+              // var myJson = json.decode(reply);
 
-              Token myToken = Token.fromJson(myJson);
-              print('created: ' + myToken.createdToken);
+              // Token myToken = Token.fromJson(myJson);
+              // print('created: ' + myToken.createdToken);
 
-              myStorage.setItem('token', myToken.createdToken);
-              print('saved: ' + myStorage.getItem('token'));
-              Navigator.pushNamed(context, Constants.HOME_SCREEN);
+              // myStorage.setItem('token', myToken.createdToken);
+              // print('saved: ' + myStorage.getItem('token'));
+              Navigator.pushNamed(context, Constants.LOGIN_SCREEN);
             } else {
+              print('status code: ${response.statusCode}');
               print(reply);
               // "You can only use letters and numbers!" => username and between 3 and 30
               // "The password should contain at least one letter and one number!" => and between 6 and 100
               _showDialog(context,
-                  'Something went wrong, password needs to contain at least one letter and number');
+                  'Something went wrong, password needs to contain at least one letter and number. Or this account already exist.');
             }
           } else {
             _showDialog(context, 'Invalid email address');

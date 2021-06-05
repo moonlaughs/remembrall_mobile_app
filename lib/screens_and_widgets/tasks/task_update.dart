@@ -61,8 +61,7 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
     setState(() {
       
           myDescriptionController.text = myTask.description;
-          myDateController.text = myTask.date;
-          myTimeController.text = myTask.time;
+          myDateController.text = myTask.dateTime;
           myLocationController.text = myTask.location;
           myPriorityController.text = myTask.priority.toString();
 
