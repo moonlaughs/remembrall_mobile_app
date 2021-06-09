@@ -31,5 +31,18 @@ class MyTask {
         );
   }
 
+  factory MyTask.fromJsonOnUpdate(Map<String, dynamic> json) {
+    return MyTask(
+        id: json['id'], 
+        description: json['description'],
+        dateTime: json['dateTime'],
+        location: json['location'],
+        priority: json['priority'],
+        done: json['done'],
+        fkTagId: json['fkTagId'],
+        fkUserId: json['fkUserId'],
+        );
+  }
+
   Map<String, dynamic> toJson() => {'id':id, 'description':description, 'dateTime':dateTime,'location': location, 'priority': priority, 'done': done, 'fkTagId': fkTagId, 'fkUserId': fkUserId, 'tag':tag};
 }

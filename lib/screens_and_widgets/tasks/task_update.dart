@@ -57,7 +57,7 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
     if (item == null) {
         return null;
       }
-    MyTask myTask = MyTask.fromJson(item);
+    MyTask myTask = MyTask.fromJsonOnUpdate(item);
     print(myTask.description);
     setState(() {
       

@@ -31,7 +31,7 @@ class _HomeScreen extends State<HomeScreen> {
   SharedPreferences prefs;
   var myUserId;
   String username = "";
-  Uri url;
+  // Uri url;
   List<MyTask> myTasks = [];
 
   List<Tag> tagsList = [];
@@ -57,7 +57,7 @@ class _HomeScreen extends State<HomeScreen> {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       myUserId = prefs.get('userId');
-      url = Uri.https('10.0.2.2:5001', '/tags/user/' + myUserId);
+      // url = Uri.https('10.0.2.2:5001', '/tags/user/' + myUserId);
       print(myUserId);
       HttpClientRequest request = await client
           .getUrl(Uri.https('10.0.2.2:5001', '/tags/user/' + myUserId));
@@ -104,7 +104,7 @@ class _HomeScreen extends State<HomeScreen> {
       print(prefs == null);
       //  myUserId = prefs.getString('userId');
       print(myUserId);
-      url = Uri.https('10.0.2.2:5001', '/todos/user/$myUserId');
+      Uri url = Uri.https('10.0.2.2:5001', '/todos/user/$myUserId');
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       HttpClientRequest request = await client.getUrl(url);
@@ -148,7 +148,7 @@ class _HomeScreen extends State<HomeScreen> {
 
   deleteToDo(String taskId) async {
     try {
-      url = Uri.https('10.0.2.2:5001', '/todos/$taskId');
+      Uri url = Uri.https('10.0.2.2:5001', '/todos/$taskId');
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       HttpClientRequest request = await client.deleteUrl(url);
@@ -166,7 +166,7 @@ class _HomeScreen extends State<HomeScreen> {
   markTaskAsDone(String taskId) async {
     print(taskId);
     try {
-      url = Uri.https('10.0.2.2:5001', '/todos/$taskId');
+      Uri url = Uri.https('10.0.2.2:5001', '/todos/$taskId');
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       HttpClientRequest request = await client.patchUrl(url);
@@ -255,29 +255,6 @@ class _HomeScreen extends State<HomeScreen> {
   }
 
   Widget _buildTask(BuildContext context, MyTask myTask, int index) {
-    // if(myTask.fkTagId != null){
-    //   print('fk not null');
-    // getTagById(myTask.fkTagId);
-    // getTagById('ad450d73-edc3-4aff-90c9-0a29a7d05b0a');
-    // }
-    // Color myTagColor = returnTagColor(myTask.tag.tagColor);
-    // print(myTagColor);
-    // print(myTask.tag.id);
-    // print(myTask.tag.tagName);
-    // if (myTask.tag != null) {
-    // print('tagColor: ${myTask.tag.id}');
-    //   if (myTask.tag.tagColor == 'Blue') {
-    //     myTagColor = Colors.blue;
-    //   } else if (myTask.tag.tagColor == 'Red') {
-    //     myTagColor = Colors.red;
-    //   } else if (myTask.tag.tagColor == 'Orange') {
-    //     myTagColor = Colors.orange;
-    //   } else if (myTask.tag.tagColor == 'Green') {
-    //     myTagColor = Colors.green;
-    //   } else {
-    //     myTagColor = Colors.transparent;
-    //   }
-    // }
     String dateToConvert = myTask.dateTime;
     DateTime dateTime = DateTime.parse(dateToConvert);
     String date = dateTime.toString().split(" ")[0];

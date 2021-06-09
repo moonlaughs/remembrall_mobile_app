@@ -10,6 +10,7 @@ import 'package:to_do_application/screens_and_widgets/home/custom_app_bar.dart';
 import 'package:to_do_application/screens_and_widgets/home/custom_drower.dart';
 
 import '../../constants.dart';
+
 class TagsList extends StatefulWidget {
   // const TagsList({ Key? key }) : super(key: key);
 
@@ -31,7 +32,7 @@ class _TagsListState extends State<TagsList> {
     myFutureItems = getTags();
   }
 
-   getTags() async {
+  getTags() async {
     prefs = await SharedPreferences.getInstance();
     try {
       client.badCertificateCallback =
@@ -45,7 +46,7 @@ class _TagsListState extends State<TagsList> {
       request.headers.add('content-type', 'application/json');
       // String myBearer = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZmUyNGYzOC0zNjE5LTRlNTEtYmNjMy1kOGNlYTdkYTIwZjMiLCJuYmYiOjE2MjI1NjQzODMsImV4cCI6MTYyMjY1MDc4MywiaWF0IjoxNjIyNTY0MzgzfQ.ERCDSwfmoj7u1TrAvLWv7Cq3cgU94_oSk2d4YHlSjxo';
       print(myBearer);
-      // request.headers.add('Authorization', myBearer);
+      request.headers.add('Authorization', myBearer);
       // request.headers = headers;
 
       HttpClientResponse response = await request.close();
@@ -74,20 +75,49 @@ class _TagsListState extends State<TagsList> {
   }
 
   deleteTag(String tagId) async {
+    print(tagId);
     try {
       Uri url = Uri.https('10.0.2.2:5001', '/tags/$tagId');
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       HttpClientRequest request = await client.deleteUrl(url);
+      String myBearer = 'Bearer ' + myStorage.getItem('token');
+      request.headers.add('content-type', 'application/json');
+      request.headers.add('Authorization', myBearer);
 
       HttpClientResponse response = await request.close();
       print(response.statusCode); //204
-      setState(() {
-        myFutureItems = getTags();
-      });
+      if (response.statusCode != 204) {
+        _showDialog(context, 'We could not delete this tag, since it is still connected to one of the tasks, after deleting the task, it will be able to delete this tag.');
+      } 
+        setState(() {
+          myFutureItems = getTags();
+        });
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> _showDialog(BuildContext context, String dialogMessage) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(dialogMessage),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Ok"),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -119,7 +149,7 @@ class _TagsListState extends State<TagsList> {
     );
   }
 
-  _buildTagListView(BuildContext context){
+  _buildTagListView(BuildContext context) {
     // if (tagsList.length == 0) {
     //   return Padding(
     //     padding: const EdgeInsets.all(8.0),
@@ -138,8 +168,8 @@ class _TagsListState extends State<TagsList> {
             case ConnectionState.done:
               List<Widget> myWidgets = [];
               snapshot.data.forEach((item) {
-                myWidgets.add(
-                    _buildTag(context, item, snapshot.data.indexOf(item)));
+                myWidgets
+                    .add(_buildTag(context, item, snapshot.data.indexOf(item)));
               });
               return Column(
                 children: myWidgets,
@@ -150,8 +180,7 @@ class _TagsListState extends State<TagsList> {
         });
   }
 
-  _buildTag(BuildContext context, Tag myTag, int index){
-    
+  _buildTag(BuildContext context, Tag myTag, int index) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Dismissible(
@@ -217,7 +246,11 @@ class _TagsListState extends State<TagsList> {
             height: 50,
             width: MediaQuery.of(context).size.width - 20,
             // color: Colors.blue,//returnTagColor(myTag.tagColor),
-            child: Center(child: Text(myTag.tagName, style: TextStyle(fontSize: 24),)),
+            child: Center(
+                child: Text(
+              myTag.tagName,
+              style: TextStyle(fontSize: 24),
+            )),
           ),
         ),
         // ),
@@ -225,14 +258,14 @@ class _TagsListState extends State<TagsList> {
     );
   }
 
-  returnTagColor(String tagColor){
-    if(tagColor == 'Blue'){
+  returnTagColor(String tagColor) {
+    if (tagColor == 'Blue') {
       return Colors.blue;
-    } else if(tagColor == 'Green'){
+    } else if (tagColor == 'Green') {
       return Colors.green;
-    } else if(tagColor == 'Orange'){
+    } else if (tagColor == 'Orange') {
       return Colors.orange;
-    } else if(tagColor == 'Red'){
+    } else if (tagColor == 'Red') {
       return Colors.red;
     } else {
       return Colors.white;

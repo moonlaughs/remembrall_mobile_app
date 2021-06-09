@@ -82,12 +82,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         String receivedString = await response.transform(utf8.decoder).join();
 
-        var myJson = json.decode(receivedString);
+        // var myJson = json.decode(receivedString);
 
-        Token myToken = Token.fromJson(myJson);
-        print('created: ' + myToken.createdToken);
+        // Token myToken = Token.fromJson(myJson);
+        // print('created: ' + myToken.createdToken);
 
-        myStorage.setItem('token', myToken.createdToken);
+        myStorage.setItem('token', '$receivedString');
         print('saved: ' + myStorage.getItem('token'));
         prefs.setString('login', myLogin);
         getUser();
@@ -106,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
   getUser() async {
     try {
       var myParesedToken = parseJwt(myStorage.getItem('token'));
+      
       DecodedToken myDecodedToken = DecodedToken.fromJson(myParesedToken);
       print(myDecodedToken.nameid);
       
@@ -121,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
       request.headers.set('Authorization', myBearer);
 
       HttpClientResponse response = await request.close();
+      print('code: ${response.statusCode}');
       if (response.statusCode == 200) {
         print(response.statusCode);
         String receivedString = await response.transform(utf8.decoder).join();

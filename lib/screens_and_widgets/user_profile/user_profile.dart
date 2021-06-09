@@ -27,13 +27,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final myPass3Controller = TextEditingController();
   var myUserId;
   String username = "";
-      Uri url;// = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
+  Uri url; // = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
 
   @override
   void initState() {
-      super.initState();
-      getUser();
-    }
+    super.initState();
+    getUser();
+  }
 
   @override
   void dispose() {
@@ -51,7 +51,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       var myParesedToken = parseJwt(myStorage.getItem('token'));
       DecodedToken myDecodedToken = DecodedToken.fromJson(myParesedToken);
       print(myDecodedToken.nameid);
-      
+
       Uri url2 = Uri.https('10.0.2.2:5001', '/users/' + myDecodedToken.nameid);
 
       client.badCertificateCallback =
@@ -71,12 +71,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
         User myUser = User.fromJson(myJson);
         print(myUser.id);
         setState(() {
-                  myEmailController.text = myUser.email;
-                  myPassController.text = 'somefakepassword';//myUser.password;
-                  username = myUser.username;
-                  myUserId = myDecodedToken.nameid;
-                  url = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
-                });
+          myEmailController.text = myUser.email;
+          myPassController.text = 'somefakepassword'; //myUser.password;
+          username = myUser.username;
+          myUserId = myDecodedToken.nameid;
+          url = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
+        });
       }
     } catch (e) {
       print(e);
@@ -85,28 +85,32 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   updateUser() async {
     try {
-      if(myPass2Controller.text == myPass3Controller.text && myPass1Controller.text != null){// || myPass2Controller.text == myPass3Controller.text){
-      client.badCertificateCallback =
-          ((X509Certificate cert, String host, int port) => true);
-      HttpClientRequest request = await client.putUrl(url);
-Map map = {"email": myEmailController.text, "newPassword": myPass2Controller.text, "currentPassword": myPass1Controller.text};
-      String myBearer = 'Bearer ' + myStorage.getItem('token');
-      request.headers.set('Authorization', myBearer);
-request.headers.set('content-type', 'application/json');
+      if (myPass2Controller.text == myPass3Controller.text &&
+          myPass1Controller.text != null) {
+        // || myPass2Controller.text == myPass3Controller.text){
+        client.badCertificateCallback =
+            ((X509Certificate cert, String host, int port) => true);
+        HttpClientRequest request = await client.putUrl(url);
+        Map map = {
+          "email": myEmailController.text,
+          "newPassword": myPass2Controller.text,
+          "currentPassword": myPass1Controller.text
+        };
+        String myBearer = 'Bearer ' + myStorage.getItem('token');
+        request.headers.set('Authorization', myBearer);
+        request.headers.set('content-type', 'application/json');
 
-            request.add(utf8.encode(json.encode(map)));
-      HttpClientResponse response = await request.close();
-      print(response.statusCode);
+        request.add(utf8.encode(json.encode(map)));
+        HttpClientResponse response = await request.close();
+        print(response.statusCode);
       }
-
     } catch (e) {
       print(e);
     }
   }
 
   deleteUser() async {
-     try {
-      
+    try {
       // Uri url = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
 
       client.badCertificateCallback =
@@ -118,6 +122,10 @@ request.headers.set('content-type', 'application/json');
 
       HttpClientResponse response = await request.close();
       print(response.statusCode);
+      if (response.statusCode == 204) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Constants.LOGIN_SCREEN, (Route<dynamic> route) => false);
+      }
     } catch (e) {
       print(e);
     }
@@ -205,7 +213,9 @@ request.headers.set('content-type', 'application/json');
               ),
               Container(
                 color: Colors.white,
-                height: MediaQuery.of(context).size.height * 0.6, /// (1.95),
+                height: MediaQuery.of(context).size.height * 0.6,
+
+                /// (1.95),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
@@ -226,57 +236,57 @@ request.headers.set('content-type', 'application/json');
                       Divider(
                         color: Colors.grey,
                       ),
-                      _disabled ? TextField(
-                          controller: myPassController,
-                          enabled: !_disabled,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              labelText: 'Password',
-                              hintText: "Password",
-                              border: InputBorder.none,
-                              fillColor: Colors.white,
-                              filled: true)) : 
-                              Column(
-                                children: [
-                                  TextField(
-                          controller: myPass1Controller,
-                          enabled: !_disabled,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                                  labelText: 'Old Password',
-                                  hintText: "Write your old password",
+                      _disabled
+                          ? TextField(
+                              controller: myPassController,
+                              enabled: !_disabled,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  hintText: "Password",
                                   border: InputBorder.none,
                                   fillColor: Colors.white,
-                                  filled: true)),
-                                  Divider(
-                        color: Colors.grey,
-                      ),
-                                  TextField(
-                          controller: myPass2Controller,
-                          enabled: !_disabled,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                                  labelText: 'New Password',
-                                  hintText: "Write your new password",
-                                  border: InputBorder.none,
-                                  fillColor: Colors.white,
-                                  filled: true)),
-                                  Divider(
-                        color: Colors.grey,
-                      ),
-                                  TextField(
-                          controller: myPass3Controller,
-                          enabled: !_disabled,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                                  labelText: 'Confirm New Password',
-                                  hintText: 
-                                      "Confirm your new password",
-                                  border: InputBorder.none,
-                                  fillColor: Colors.white,
-                                  filled: true)),
-                                ],
-                              ),
+                                  filled: true))
+                          : Column(
+                              children: [
+                                TextField(
+                                    controller: myPass1Controller,
+                                    enabled: !_disabled,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                        labelText: 'Old Password',
+                                        hintText: "Write your old password",
+                                        border: InputBorder.none,
+                                        fillColor: Colors.white,
+                                        filled: true)),
+                                Divider(
+                                  color: Colors.grey,
+                                ),
+                                TextField(
+                                    controller: myPass2Controller,
+                                    enabled: !_disabled,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                        labelText: 'New Password',
+                                        hintText: "Write your new password",
+                                        border: InputBorder.none,
+                                        fillColor: Colors.white,
+                                        filled: true)),
+                                Divider(
+                                  color: Colors.grey,
+                                ),
+                                TextField(
+                                    controller: myPass3Controller,
+                                    enabled: !_disabled,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                        labelText: 'Confirm New Password',
+                                        hintText: "Confirm your new password",
+                                        border: InputBorder.none,
+                                        fillColor: Colors.white,
+                                        filled: true)),
+                              ],
+                            ),
                       Divider(
                         color: Colors.grey,
                       ),
@@ -306,80 +316,83 @@ request.headers.set('content-type', 'application/json');
                               ),
                             ),
                           ),
-                          _disabled ? GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _disabled = !_disabled;
-                              });
-                            },
-                            child: Container(
-                              width: buttonWidth,
-                              height: buttonHeight,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100.0)),
-                                color: Colors.teal,
-                              ),
-                              child: Center(
-                                child: AutoSizeText('Update Profile',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                    maxLines: 1),
-                              ),
-                            ),
-                          ):
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                updateUser();
-                                _disabled = !_disabled;
-                              });
-                            },
-                            child: Container(
-                              width: buttonWidth,
-                              height: buttonHeight,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100.0)),
-                                color: Colors.teal,
-                              ),
-                              child: Center(
-                                child: AutoSizeText('Save Changes',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                    maxLines: 1),
-                              ),
-                            ),
-                          ),
+                          _disabled
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _disabled = !_disabled;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: buttonWidth,
+                                    height: buttonHeight,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100.0)),
+                                      color: Colors.teal,
+                                    ),
+                                    child: Center(
+                                      child: AutoSizeText('Update Profile',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                          maxLines: 1),
+                                    ),
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      updateUser();
+                                      _disabled = !_disabled;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: buttonWidth,
+                                    height: buttonHeight,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100.0)),
+                                      color: Colors.teal,
+                                    ),
+                                    child: Center(
+                                      child: AutoSizeText('Save Changes',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                          maxLines: 1),
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
-                      Padding(padding: EdgeInsets.only(top:20)),
+                      Padding(padding: EdgeInsets.only(top: 20)),
                       GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamedAndRemoveUntil(Constants.LOGIN_SCREEN, (Route<dynamic> route) => false);
-                            },
-                            child: Container(
-                              width: buttonWidth,
-                              height: buttonHeight,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100.0)),
-                                color: Colors.cyan,
-                              ),
-                              child: Center(
-                                child: AutoSizeText('Log Out',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                    maxLines: 1),
-                              ),
-                            ),
+                        onTap: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Constants.LOGIN_SCREEN,
+                              (Route<dynamic> route) => false);
+                        },
+                        child: Container(
+                          width: buttonWidth,
+                          height: buttonHeight,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100.0)),
+                            color: Colors.cyan,
                           ),
+                          child: Center(
+                            child: AutoSizeText('Log Out',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                                maxLines: 1),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
