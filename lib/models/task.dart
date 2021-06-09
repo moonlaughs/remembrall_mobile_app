@@ -23,10 +23,11 @@ class MyTask {
         done: json['done'],
         fkTagId: json['fkTagId'],
         fkUserId: json['fkUserId'],
-        tag: Tag(
-          tagName: json['tagName'],
-          tagColor: json['tagColor'],
-        )
+        tag: Tag.fromJson(json['tag'])
+        // Tag(
+        //   tagName: json['tagName'],
+        //   tagColor: json['tagColor'],
+        // )
         );
   }
 

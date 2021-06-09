@@ -39,8 +39,8 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
   List<String> tagsNames = [];
   Tag tObj = Tag().getInstance();
   String dropdownValue2 = 'Add tag';
-  String dropdownValueTag = 'Blue';
-  List<String> myColors = ['Blue', 'Green', 'Orange', 'Red'];
+  // String dropdownValueTag = 'Blue';
+  // List<String> myColors = ['Blue', 'Green', 'Orange', 'Red'];
 
   @override
   void initState() {
@@ -58,59 +58,59 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
     // tagsNames.add('Create tag');
   }
 
-  createTag() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      myUserId = prefs.get('userId');
-      url = Uri.https('10.0.2.2:5001', '/tags');
-    });
-    try {
-      client.badCertificateCallback =
-          ((X509Certificate cert, String host, int port) => true);
-      // String tagName = 'new Tag';
-      // String myTime = myTimeController.text;
-      // String tagColor = 'green';
-      String tagName = myTagNameController.text;
-      int tagColor = myColors.indexOf(dropdownValueTag);
-      Map map;
-      if (tagName == null || tagColor == null) {
-        _showDialog(context,
-            'Please fill up required information in order to create a tag');
-      } else {
-        // if (myPriority == null || myPriority == "") {}
-        map = {
-          "tagName": tagName,
-          "tagColor": myColors[tagColor],
-          "fkUserId": myUserId
-        };
-        HttpClientRequest request = await client.postUrl(url);
-        // Map<String, String> headers = {};
-        // headers['content-type'] = 'application/json';
+  // createTag() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     myUserId = prefs.get('userId');
+  //     url = Uri.https('10.0.2.2:5001', '/tags');
+  //   });
+  //   try {
+  //     client.badCertificateCallback =
+  //         ((X509Certificate cert, String host, int port) => true);
+  //     // String tagName = 'new Tag';
+  //     // String myTime = myTimeController.text;
+  //     // String tagColor = 'green';
+  //     String tagName = myTagNameController.text;
+  //     int tagColor = myColors.indexOf(dropdownValueTag);
+  //     Map map;
+  //     if (tagName == null || tagColor == null) {
+  //       _showDialog(context,
+  //           'Please fill up required information in order to create a tag');
+  //     } else {
+  //       // if (myPriority == null || myPriority == "") {}
+  //       map = {
+  //         "tagName": tagName,
+  //         "tagColor": myColors[tagColor],
+  //         "fkUserId": myUserId
+  //       };
+  //       HttpClientRequest request = await client.postUrl(url);
+  //       // Map<String, String> headers = {};
+  //       // headers['content-type'] = 'application/json';
 
-        // request.headers.set('content-type', 'application/json');
-        String myBearer = 'Bearer ' + myStorage.getItem('token');
-        // headers['Authorization'] = myBearer;
-        request.headers.add('content-type', 'application/json');
-        // String myBearer = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZmUyNGYzOC0zNjE5LTRlNTEtYmNjMy1kOGNlYTdkYTIwZjMiLCJuYmYiOjE2MjI1NjQzODMsImV4cCI6MTYyMjY1MDc4MywiaWF0IjoxNjIyNTY0MzgzfQ.ERCDSwfmoj7u1TrAvLWv7Cq3cgU94_oSk2d4YHlSjxo';
-        print(myBearer);
-        // request.headers.add('Authorization', myBearer);
-        // request.headers = headers;
+  //       // request.headers.set('content-type', 'application/json');
+  //       String myBearer = 'Bearer ' + myStorage.getItem('token');
+  //       // headers['Authorization'] = myBearer;
+  //       request.headers.add('content-type', 'application/json');
+  //       // String myBearer = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZmUyNGYzOC0zNjE5LTRlNTEtYmNjMy1kOGNlYTdkYTIwZjMiLCJuYmYiOjE2MjI1NjQzODMsImV4cCI6MTYyMjY1MDc4MywiaWF0IjoxNjIyNTY0MzgzfQ.ERCDSwfmoj7u1TrAvLWv7Cq3cgU94_oSk2d4YHlSjxo';
+  //       print(myBearer);
+  //       // request.headers.add('Authorization', myBearer);
+  //       // request.headers = headers;
 
-        request.add(utf8.encode(json.encode(map)));
-        print(map);
-        HttpClientResponse response = await request.close();
-        print(response.statusCode);
-        String reply = await response.transform(utf8.decoder).join();
-        print(reply);
-        if (response.statusCode == 201) {
-          print('created a tag');
-          Navigator.pushNamed(context, Constants.HOME_SCREEN);
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  //       request.add(utf8.encode(json.encode(map)));
+  //       print(map);
+  //       HttpClientResponse response = await request.close();
+  //       print(response.statusCode);
+  //       String reply = await response.transform(utf8.decoder).join();
+  //       print(reply);
+  //       if (response.statusCode == 201) {
+  //         print('created a tag');
+  //         Navigator.pushNamed(context, Constants.HOME_SCREEN);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -122,61 +122,6 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
     myTagController.dispose();
     super.dispose();
   }
-
-  // getUser() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //         myUserId = prefs.get('userId');
-  //         url = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
-  //       });
-  //   // try {
-  //   //   var myParesedToken = parseJwt(myStorage.getItem('token'));
-  //   //   DecodedToken myDecodedToken = DecodedToken.fromJson(myParesedToken);
-  //   //   // print(myDecodedToken.nameid);
-
-  //   //   Uri url2 = Uri.https('10.0.2.2:5001', '/users/' + myDecodedToken.nameid);
-
-  //   //   client.badCertificateCallback =
-  //   //       ((X509Certificate cert, String host, int port) => true);
-  //   //   HttpClientRequest request = await client.getUrl(url2);
-
-  //   //   // request.headers.set('content-type', 'application/json');
-  //   //   String myBearer = 'Bearer ' + myStorage.getItem('token');
-  //   //   // print(myBearer);
-  //   //   request.headers.set('Authorization', myBearer);
-
-  //   //   HttpClientResponse response = await request.close();
-  //   //   if (response.statusCode == 200) {
-  //   //     // print(response.statusCode);
-  //   //     // String receivedString = await response.transform(utf8.decoder).join();
-  //   //     // var myJson = json.decode(receivedString);
-  //   //     // User myUser = User.fromJson(myJson);
-  //   //     // print(myUser.id);
-  //   //     setState(() {
-  //   //       myUserId = myDecodedToken.nameid;
-  //   //       // url = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
-  //   //       url = Uri.https('10.0.2.2:5001', '/todos');
-  //   //     });
-  //   //   }
-  //   // } catch (e) {
-  //   //   print(e);
-  //   // }
-  // }
-
-  // Map<String, dynamic> parseJwt(String token) {
-  //   final parts = token.split('.');
-  //   if (parts.length != 3) {
-  //     throw Exception('invalid token');
-  //   }
-
-  //   final payload = _decodeBase64(parts[1]);
-  //   final payloadMap = json.decode(payload);
-  //   if (payloadMap is! Map<String, dynamic>) {
-  //     throw Exception('invalid payload');
-  //   }
-
-  //   return payloadMap;
-  // }
 
   createTask() async {
     prefs = await SharedPreferences.getInstance();
@@ -197,7 +142,7 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
       List<String> myPriorities = ['Choose Priority', 'Low', 'Medium', 'High'];
       int priority = myPriorities.indexOf(dropdownValue);
 
-      int fkTag = myColors.indexOf(dropdownValueTag);
+      int fkTag = tagsNames.indexOf(dropdownValue2);
 
       print('drop: $dropdownValue');
       Map map;
@@ -205,8 +150,10 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
         _showDialog(context,
             'Please fill up required information in order to create a task\nDescription and Tag is required');
       } else {
+        print('==========================myfk: $fkTag');
         // if (myPriority == null || myPriority == "") {}
         if (fkTag == 0) {
+          print('created without tag');
           map = {
             "description": myDescription,
             "dateTime": myDate, //"2021-06-01T14:16:14.985Z",
@@ -217,13 +164,16 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
             "fkUserId": myUserId
           };
         } else {
+          print('created with tag');
+          print(tagsList[fkTag - 1].id);
+
           map = {
             "description": myDescription,
             "dateTime": myDate, //"2021-06-01T14:16:14.985Z",
             "location": myLocation,
             "priority": priority,
             "done": false,
-            "fkTagId": "ad450d73-edc3-4aff-90c9-0a29a7d05b0a",
+            "fkTagId": tagsList[fkTag - 1].id,
             "fkUserId": myUserId
           };
         }

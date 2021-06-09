@@ -61,16 +61,11 @@ class _HomeScreen extends State<HomeScreen> {
       print(myUserId);
       HttpClientRequest request = await client
           .getUrl(Uri.https('10.0.2.2:5001', '/tags/user/' + myUserId));
-      // Map<String, String> headers = {};
-      // headers['content-type'] = 'application/json';
-
-      // request.headers.set('content-type', 'application/json');
       String myBearer = 'Bearer ' + myStorage.getItem('token');
-      // headers['Authorization'] = myBearer;
       request.headers.add('content-type', 'application/json');
       // String myBearer = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZmUyNGYzOC0zNjE5LTRlNTEtYmNjMy1kOGNlYTdkYTIwZjMiLCJuYmYiOjE2MjI1NjQzODMsImV4cCI6MTYyMjY1MDc4MywiaWF0IjoxNjIyNTY0MzgzfQ.ERCDSwfmoj7u1TrAvLWv7Cq3cgU94_oSk2d4YHlSjxo';
-      print(myBearer);
-      // request.headers.add('Authorization', myBearer);
+      // print(myBearer);
+      request.headers.add('Authorization', myBearer);
       // request.headers = headers;
 
       HttpClientResponse response = await request.close();
@@ -96,49 +91,6 @@ class _HomeScreen extends State<HomeScreen> {
       print(e);
     }
   }
-  // getUser() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   print('my prefs: ${prefs == null}');
-  //   setState(() {
-  //         myUserId = prefs.getString('userId');
-  //       });
-  // }
-  // getUser() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   try {
-  //     var myParesedToken = parseJwt(myStorage.getItem('token'));
-  //     DecodedToken myDecodedToken = DecodedToken.fromJson(myParesedToken);
-  //     print(myDecodedToken.nameid);
-
-  //     Uri url2 = Uri.https('10.0.2.2:5001', '/users/' + myDecodedToken.nameid);
-
-  //     client.badCertificateCallback =
-  //         ((X509Certificate cert, String host, int port) => true);
-  //     HttpClientRequest request = await client.getUrl(url2);
-
-  //     // request.headers.set('content-type', 'application/json');
-  //     String myBearer = 'Bearer ' + myStorage.getItem('token');
-  //     print(myBearer);
-  //     request.headers.set('Authorization', myBearer);
-
-  //     HttpClientResponse response = await request.close();
-  //     if (response.statusCode == 200) {
-  //       print(response.statusCode);
-  //       String receivedString = await response.transform(utf8.decoder).join();
-  //       var myJson = json.decode(receivedString);
-  //       User myUser = User.fromJson(myJson);
-  //       print(myUser.id);
-  //       prefs.setString('userId', myUser.id);
-  //       prefs.setString('user', myJson);
-
-  //       setState(() {
-  //                 myUserId = myUser.id;
-  //               });
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   getToDos() async {
     prefs = await SharedPreferences.getInstance();
@@ -229,40 +181,6 @@ class _HomeScreen extends State<HomeScreen> {
     }
   }
 
-  // Map<String, dynamic> parseJwt(String token) {
-  //   final parts = token.split('.');
-  //   if (parts.length != 3) {
-  //     throw Exception('invalid token');
-  //   }
-
-  //   final payload = _decodeBase64(parts[1]);
-  //   final payloadMap = json.decode(payload);
-  //   if (payloadMap is! Map<String, dynamic>) {
-  //     throw Exception('invalid payload');
-  //   }
-
-  //   return payloadMap;
-  // }
-
-  // String _decodeBase64(String str) {
-  //   String output = str.replaceAll('-', '+').replaceAll('_', '/');
-
-  //   switch (output.length % 4) {
-  //     case 0:
-  //       break;
-  //     case 2:
-  //       output += '==';
-  //       break;
-  //     case 3:
-  //       output += '=';
-  //       break;
-  //     default:
-  //       throw Exception('Illegal base64url string!"');
-  //   }
-
-  //   return utf8.decode(base64Url.decode(output));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -273,12 +191,6 @@ class _HomeScreen extends State<HomeScreen> {
         children: [
           _buildProgressBar(context),
           _buildListView(context),
-          // GestureDetector(
-          //   onTap: (){
-          //     Navigator.push(context, MaterialPageRoute(builder: (context) => EncryptionScreen()));
-          //   },
-          //   child: Text('Encrypt')
-          // )
         ],
       )),
       floatingActionButton: FloatingActionButton(
@@ -322,92 +234,11 @@ class _HomeScreen extends State<HomeScreen> {
               return Column(
                 children: myWidgets,
               );
-            //       return new ListView.builder(
-            //   itemCount: snapshot.data.length,
-            //   itemBuilder: (BuildContext context, int index) {
-            //     String key = snapshot.data.elementAt(index).description;
-            //     return new Column(
-            //       children: <Widget>[
-            //         new ListTile(
-            //           title: new Text("$key"),
-            //           // subtitle: new Text("${myData[index]}"),
-            //           trailing: Icon(Icons.arrow_right),
-            //           onTap: () {
-            //             //DisplayAllImages
-            //           },
-            //         ),
-            //         new Divider(
-            //           height: 2.0,
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // );
             default:
               return Text('default');
           }
         });
   }
-  // var tagCol = Colors.blue;
-  // getTagById(String fkTagId) async {
-  //   // prefs = await SharedPreferences.getInstance();
-  //   try {
-  //     client.badCertificateCallback =
-  //         ((X509Certificate cert, String host, int port) => true);
-  //     // myUserId = prefs.get('userId');
-  //     url = Uri.https('10.0.2.2:5001', '/tags/' + fkTagId);
-  //     HttpClientRequest request = await client
-  //         .getUrl(url);
-  //     // Map<String, String> headers = {};
-  //     // headers['content-type'] = 'application/json';
-
-  //     // request.headers.set('content-type', 'application/json');
-  //     String myBearer = 'Bearer ' + myStorage.getItem('token');
-  //     // headers['Authorization'] = myBearer;
-  //     request.headers.add('content-type', 'application/json');
-  //     // String myBearer = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZmUyNGYzOC0zNjE5LTRlNTEtYmNjMy1kOGNlYTdkYTIwZjMiLCJuYmYiOjE2MjI1NjQzODMsImV4cCI6MTYyMjY1MDc4MywiaWF0IjoxNjIyNTY0MzgzfQ.ERCDSwfmoj7u1TrAvLWv7Cq3cgU94_oSk2d4YHlSjxo';
-  //     print(myBearer);
-  //     // request.headers.add('Authorization', myBearer);
-  //     // request.headers = headers;
-
-  //     HttpClientResponse response = await request.close();
-  //     // print(response.statusCode);
-  //     // String reply = await response.transform(utf8.decoder).join();
-  //     // print(reply);
-  //     if (response.statusCode == 200) {
-  //        String receivedString = await response.transform(utf8.decoder).join();
-  //       var myJson = json.decode(receivedString);
-  //       Tag myTag = Tag.fromJson(myJson);
-  //       print(myTag.tagColor);
-  //       if(myTag.tagColor == 'Blue'){
-  //       tagCol = Colors.blue;
-  //       } else if(myTag.tagColor == 'Red'){
-  //       tagCol = Colors.red;
-  //       } else if(myTag.tagColor == 'Yellow'){
-  //       tagCol = Colors.yellow;
-  //       } else if(myTag.tagColor == 'Green'){
-  //       tagCol = Colors.green;
-  //       }
-
-  //       // setState(() {
-  //       // tagsList =
-  //       //     (json.decode(reply) as List).map((i) => Tag.fromJson(i)).toList();
-
-  //       // Tag tObj = Tag().getInstance();
-  //       // tObj.setTags(tagsList);
-
-  //       // tagsList.forEach((element) {
-  //       //   print(element.tagName);
-  //       //   tagsNames.add(element.tagName);
-  //       // });
-  //       // myStorage.setItem('tagsNames', tagsNames);
-  //       // });
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   returnTagColor(String tagColor){
     if(tagColor == 'Blue'){
       return Colors.blue;
@@ -429,9 +260,10 @@ class _HomeScreen extends State<HomeScreen> {
     // getTagById(myTask.fkTagId);
     // getTagById('ad450d73-edc3-4aff-90c9-0a29a7d05b0a');
     // }
-    Color myTagColor = returnTagColor(myTask.tag.tagColor);
-    print(myTagColor);
-    print(myTask.tag.id);
+    // Color myTagColor = returnTagColor(myTask.tag.tagColor);
+    // print(myTagColor);
+    // print(myTask.tag.id);
+    // print(myTask.tag.tagName);
     // if (myTask.tag != null) {
     // print('tagColor: ${myTask.tag.id}');
     //   if (myTask.tag.tagColor == 'Blue') {
