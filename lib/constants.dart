@@ -13,4 +13,10 @@ class Constants{
   static String CREATE_TASK_SCREEN='/createTask';
   // ignore: non_constant_identifier_names
   static String UPDATE_TASK_SCREEN='/updateTask';
+  // ignore: non_constant_identifier_names
+  static String TAG_SCREEN='/tagScreen';
+  // ignore: non_constant_identifier_names
+  static String CREATE_TAG_SCREEN='/createTag';
+  // ignore: non_constant_identifier_names
+  static String UPDATE_TAG_SCREEN='/updateTag';
 }

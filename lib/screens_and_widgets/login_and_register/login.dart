@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         getUser();
         Navigator.pushNamed(context, Constants.HOME_SCREEN);
       } else {
-        _showDialog(context, 'Something went wrong, please Try again');
+        _showDialog(context, 'Wrong username/password.\nPlease try again.');
       }
     } catch (e) {
       print('================');

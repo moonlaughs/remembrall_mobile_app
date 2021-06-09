@@ -5,14 +5,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:localstorage/localstorage.dart';
 // import 'package:to_do_application/Models/user.dart';
 import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
-import 'package:to_do_application/models/decodedToken.dart';
+// import 'package:to_do_application/models/decodedToken.dart';
 import 'package:to_do_application/models/task.dart';
 import 'package:to_do_application/screens_and_widgets/home/custom_app_bar.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 class TaskUpdateScreen extends StatefulWidget {
   @override
   _TaskUpdateScreen createState() => _TaskUpdateScreen();
@@ -24,13 +26,14 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
   LocalStorage myStorage = LocalStorageHelper().getInstance();
   final myDescriptionController = TextEditingController();
   final myDateController = TextEditingController();
-  final myTimeController = TextEditingController();
   final myLocationController = TextEditingController();
-  final myPriorityController = TextEditingController();
-  // final myTagController = TextEditingController();
+  // final myPriorityController = TextEditingController();
   var myUserId;
   String username = "";
+  String dropdownValue;// = 'Choose Priority';
   Uri url; // = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
+  SharedPreferences prefs;
+  List<String> priorities = ['Choose Priority', 'Low', 'Medium', 'High'];
 
   @override
   void initState() {
@@ -44,10 +47,8 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
     // Clean up the controller when the widget is disposed.
     myDescriptionController.dispose();
     myDateController.dispose();
-    myTimeController.dispose();
     myLocationController.dispose();
-    myPriorityController.dispose();
-    // myTagController.dispose();
+    // myPriorityController.dispose();
     super.dispose();
   }
 
@@ -63,45 +64,17 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
           myDescriptionController.text = myTask.description;
           myDateController.text = myTask.dateTime;
           myLocationController.text = myTask.location;
-          myPriorityController.text = myTask.priority.toString();
+          dropdownValue = priorities[myTask.priority];
 
         });
         return myTask;
   }
 
   getUser() async {
-    try {
-      var myParesedToken = parseJwt(myStorage.getItem('token'));
-      DecodedToken myDecodedToken = DecodedToken.fromJson(myParesedToken);
-      // print(myDecodedToken.nameid);
-
-      Uri url2 = Uri.https('10.0.2.2:5001', '/users/' + myDecodedToken.nameid);
-
-      client.badCertificateCallback =
-          ((X509Certificate cert, String host, int port) => true);
-      HttpClientRequest request = await client.getUrl(url2);
-
-      // request.headers.set('content-type', 'application/json');
-      String myBearer = 'Bearer ' + myStorage.getItem('token');
-      // print(myBearer);
-      request.headers.set('Authorization', myBearer);
-
-      HttpClientResponse response = await request.close();
-      if (response.statusCode == 200) {
-        // print(response.statusCode);
-        // String receivedString = await response.transform(utf8.decoder).join();
-        // var myJson = json.decode(receivedString);
-        // User myUser = User.fromJson(myJson);
-        // print(myUser.id);
-        setState(() {
-          myUserId = myDecodedToken.nameid;
-          // url = Uri.https('10.0.2.2:5001', '/users/' + myUserId);
-          url = Uri.https('10.0.2.2:5001', '/todos');
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      myUserId = prefs.get('userId');
+    });
   }
 
   Map<String, dynamic> parseJwt(String token) {
@@ -124,12 +97,9 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       String myDescription = myDescriptionController.text;
-      // String myDate = myDateController.text;
-      // String myTime = myTimeController.text;
+      String myDate = myDateController.text;
       String myLocation = myLocationController.text;
-      // String myPriority = myPriorityController.text;
-      // String myTag = myTagController.text;
-      int priority = 1; // nneds to be adapted to 0
+      String myPriority = priorities.indexOf(dropdownValue).toString();
 
       Map map;
       if (myDescription == null) {
@@ -139,11 +109,9 @@ class _TaskUpdateScreen extends State<TaskUpdateScreen> {
         // if (myPriority == null || myPriority == "") {}
         map = {
   "description": myDescription,
-  "date": "2021-05-10T20:52:14.304Z",
-  "time": "2021-05-10T20:52:14.304Z",
+  "datetime": myDate,
   "location": myLocation,
-  "done": false,
-  "priority": 0
+  "priority": myPriority
 };
 Uri url3 = Uri.https('10.0.2.2:5001', '/todos/${taskToUpdate.id}');
         HttpClientRequest request = await client.putUrl(url3);
@@ -262,30 +230,6 @@ Uri url3 = Uri.https('10.0.2.2:5001', '/todos/${taskToUpdate.id}');
             color: Colors.white,
           ),
           TextField(
-              controller: myDateController,
-              obscureText: false,
-              decoration: InputDecoration(
-                  labelText: 'Date',
-                  hintText: "Type Date...",
-                  border: InputBorder.none,
-                  fillColor: Colors.transparent,
-                  filled: true)),
-          Divider(
-            color: Colors.white,
-          ),
-          TextField(
-              controller: myTimeController,
-              obscureText: false,
-              decoration: InputDecoration(
-                  labelText: 'Time',
-                  hintText: "Type Time...",
-                  border: InputBorder.none,
-                  fillColor: Colors.transparent,
-                  filled: true)),
-          Divider(
-            color: Colors.white,
-          ),
-          TextField(
             controller: myLocationController,
             obscureText: false,
             decoration: InputDecoration(
@@ -298,30 +242,76 @@ Uri url3 = Uri.https('10.0.2.2:5001', '/todos/${taskToUpdate.id}');
           Divider(
             color: Colors.white,
           ),
-          TextField(
-              controller: myPriorityController,
-              obscureText: false,
-              decoration: InputDecoration(
-                  labelText: 'Priority',
-                  hintText: "Type priority...",
-                  border: InputBorder.none,
-                  fillColor: Colors.transparent,
-                  filled: true)),
-          Divider(
-            color: Colors.white,
-          ),
           // TextField(
-          //     controller: myTagController,
+          //     controller: myDateController,
           //     obscureText: false,
           //     decoration: InputDecoration(
-          //         labelText: 'Tag',
-          //         hintText: "Type tag...",
+          //         labelText: 'Date',
+          //         hintText: "Type Date...",
           //         border: InputBorder.none,
           //         fillColor: Colors.transparent,
           //         filled: true)),
-          // Divider(
-          //   color: Colors.white,
-          // ),
+                  GestureDetector(
+              onTap: () {
+                DatePicker.showDateTimePicker(context,
+                    showTitleActions: true,
+                    minTime: DateTime(2018, 3, 5),
+                    maxTime: DateTime(2019, 6, 7), onChanged: (dateTime) {
+                  myDateController.text = dateTime.toString();
+                  print('change $dateTime in time zone ' +
+                      dateTime.timeZoneOffset.inHours.toString());
+                }, onConfirm: (dateTime) {
+                  myDateController.text =
+                      dateTime.toString().replaceAll(' ', 'T');
+                  print('confirm $dateTime');
+                }, currentTime: DateTime.now(), locale: LocaleType.en);
+              },
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: myDateController.text == null ? "Choose date and time " : myDateController.text,
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black)),
+                        WidgetSpan(
+                          child: Icon(Icons.date_range, size: 24),
+                        ),
+                        // TextSpan(
+                        //   text: " to add",
+                        // ),
+                      ],
+                    ),
+                  )
+                  // AutoSizeText('Pick date and time'),
+                  )),
+          Divider(
+            color: Colors.white,
+          ),
+          
+          DropdownButton<String>(
+            value: dropdownValue,
+            icon: const Icon(Icons.arrow_downward),
+            iconSize: 24,
+            elevation: 16,
+            underline: Container(
+              height: 2,
+              color: Colors.transparent,
+            ),
+            onChanged: (String newValue) {
+              setState(() {
+                dropdownValue = newValue;
+              });
+            },
+            items: priorities
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: GestureDetector(

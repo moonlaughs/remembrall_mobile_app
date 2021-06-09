@@ -1,3 +1,5 @@
+import 'package:to_do_application/models/tag.dart';
+
 class MyTask {
   String id;
   String description;
@@ -7,8 +9,9 @@ class MyTask {
   int priority;
   String fkTagId;
   String fkUserId;
+  Tag tag;
 
-  MyTask({this.id, this.description, this.dateTime,this.location, this.done, this.priority, this.fkTagId, this.fkUserId});
+  MyTask({this.id, this.description, this.dateTime,this.location, this.done, this.priority, this.fkTagId, this.fkUserId, this.tag});
 
   factory MyTask.fromJson(Map<String, dynamic> json) {
     return MyTask(
@@ -20,8 +23,12 @@ class MyTask {
         done: json['done'],
         fkTagId: json['fkTagId'],
         fkUserId: json['fkUserId'],
+        tag: Tag(
+          tagName: json['tagName'],
+          tagColor: json['tagColor'],
+        )
         );
   }
 
-  Map<String, dynamic> toJson() => {'id':id, 'description':description, 'dateTime':dateTime,'location': location, 'priority': priority, 'done': done, 'fkTagId': fkTagId, 'fkUserId': fkUserId};
+  Map<String, dynamic> toJson() => {'id':id, 'description':description, 'dateTime':dateTime,'location': location, 'priority': priority, 'done': done, 'fkTagId': fkTagId, 'fkUserId': fkUserId, 'tag':tag};
 }

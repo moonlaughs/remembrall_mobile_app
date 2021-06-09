@@ -14,6 +14,8 @@ class Tag {
         tagColor: json['tagColor']);
   }
 
+  Map<String, dynamic> toJson() => {'id':id, 'tagName': tagName, 'tagColor':tagColor};
+
   List<Tag> myTags = [];
 
   getTags(){

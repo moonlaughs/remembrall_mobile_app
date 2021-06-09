@@ -20,34 +20,6 @@ class CustomDrawer extends StatelessWidget {
           child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          // DrawerHeader(
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.start,
-          //     children: [
-          //       ConstrainedBox(
-          //         constraints: BoxConstraints(
-          //           minWidth: 44,
-          //           minHeight: 44,
-          //           maxWidth: 44,
-          //           maxHeight: 44,
-          //         ),
-          //         // child: Icon(
-          //         //   Icons.settings,
-          //         //   color: Colors.white,
-          //         // ),
-          //       ),
-          //       // AutoSizeText(
-          //       //   'Settings',
-          //       //   // tr('txt_settings'),
-          //       //   style: TextStyle(fontSize: 20, color: Colors.white),
-          //       //   maxLines: 1,
-          //       // ),
-          //     ],
-          //   ), //'Settings'),
-          //   // decoration: BoxDecoration(
-          //   //   color: Colors.cyan.withOpacity(0.2) //Colors.lightBlue[400],
-          //   // ),
-          // ),
           Padding(padding: EdgeInsets.only(top: 150)),
           ListTile(
             title: AutoSizeText(
@@ -69,18 +41,13 @@ class CustomDrawer extends StatelessWidget {
             
             onTap: () {
               Navigator.pushNamed(context, Constants.HOME_SCREEN);
-              // if(myStorage.getItem('processItem') != null){
-              //     Navigator.of(context).pushNamedAndRemoveUntil('/chosenFaceScreen', (Route<dynamic> route) => false);
-              //   } else {
-              //     Navigator.of(context).pushNamedAndRemoveUntil('/mainScreen', (Route<dynamic> route) => false);
-              //   }
             },
           ),
           
-          Padding(padding: EdgeInsets.only(top: 90)),
+          // Padding(padding: EdgeInsets.only(top: 90)),
           ListTile(
             title: AutoSizeText(
-              'Today',
+              'Tags',
               // tr('txt_stats'),
               style: TextStyle(fontSize: 20, color: Colors.white),
               maxLines: 1,
@@ -95,90 +62,90 @@ class CustomDrawer extends StatelessWidget {
               child: Icon(Icons.today_outlined, color: Colors.white),
             ),
             onTap: () {
-              // Navigator.pushNamed(context, '/statistics');
+              Navigator.pushNamed(context, Constants.TAG_SCREEN);
             },
           ),
-          ListTile(
-            title: AutoSizeText(
-              'This week',
-              // tr('txt_stats'),
-              style: TextStyle(fontSize: 20, color: Colors.white),
-              maxLines: 1,
-            ),
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 44,
-                minHeight: 44,
-                maxWidth: 44,
-                maxHeight: 44,
-              ),
-              child: Icon(Icons.calendar_today_outlined, color: Colors.white),
-            ),
-            onTap: () {
-              // Navigator.pushNamed(context, '/statistics');
-            },
-          ),
-          ListTile(
-            title: AutoSizeText(
-              'This month',
-              // tr('txt_stats'),
-              style: TextStyle(fontSize: 20, color: Colors.white),
-              maxLines: 1,
-            ),
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 44,
-                minHeight: 44,
-                maxWidth: 44,
-                maxHeight: 44,
-              ),
-              child: Icon(Icons.calendar_today_outlined, color: Colors.white),
-            ),
-            onTap: () {
-              // Navigator.pushNamed(context, '/statistics');
-            },
-          ),
-          ListTile(
-            title: AutoSizeText(
-              'This year',
-              // tr('txt_stats'),
-              style: TextStyle(fontSize: 20, color: Colors.white),
-              maxLines: 1,
-            ),
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 44,
-                minHeight: 44,
-                maxWidth: 44,
-                maxHeight: 44,
-              ),
-              child: Icon(Icons.calendar_today_outlined, color: Colors.white),
-            ),
-            onTap: () {
-              // Navigator.pushNamed(context, '/statistics');
-            },
-          ),
-          ListTile(
-            title: AutoSizeText(
-              'All',
-              // tr('txt_stats'),
-              style: TextStyle(fontSize: 20, color: Colors.white),
-              maxLines: 1,
-            ),
-            leading: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 44,
-                minHeight: 44,
-                maxWidth: 44,
-                maxHeight: 44,
-              ),
-              child: Icon(Icons.list, color: Colors.white),
-            ),
-            onTap: () {
-              // Navigator.pushNamed(context, '/statistics');
-            },
-          ),
-          Padding(padding: EdgeInsets.only(top: 90)),
+          // ListTile(
+          //   title: AutoSizeText(
+          //     'This week',
+          //     // tr('txt_stats'),
+          //     style: TextStyle(fontSize: 20, color: Colors.white),
+          //     maxLines: 1,
+          //   ),
+          //   leading: ConstrainedBox(
+          //     constraints: BoxConstraints(
+          //       minWidth: 44,
+          //       minHeight: 44,
+          //       maxWidth: 44,
+          //       maxHeight: 44,
+          //     ),
+          //     child: Icon(Icons.calendar_today_outlined, color: Colors.white),
+          //   ),
+          //   onTap: () {
+          //     // Navigator.pushNamed(context, '/statistics');
+          //   },
+          // ),
+          // ListTile(
+          //   title: AutoSizeText(
+          //     'This month',
+          //     // tr('txt_stats'),
+          //     style: TextStyle(fontSize: 20, color: Colors.white),
+          //     maxLines: 1,
+          //   ),
+          //   leading: ConstrainedBox(
+          //     constraints: BoxConstraints(
+          //       minWidth: 44,
+          //       minHeight: 44,
+          //       maxWidth: 44,
+          //       maxHeight: 44,
+          //     ),
+          //     child: Icon(Icons.calendar_today_outlined, color: Colors.white),
+          //   ),
+          //   onTap: () {
+          //     // Navigator.pushNamed(context, '/statistics');
+          //   },
+          // ),
+          // ListTile(
+          //   title: AutoSizeText(
+          //     'This year',
+          //     // tr('txt_stats'),
+          //     style: TextStyle(fontSize: 20, color: Colors.white),
+          //     maxLines: 1,
+          //   ),
+          //   leading: ConstrainedBox(
+          //     constraints: BoxConstraints(
+          //       minWidth: 44,
+          //       minHeight: 44,
+          //       maxWidth: 44,
+          //       maxHeight: 44,
+          //     ),
+          //     child: Icon(Icons.calendar_today_outlined, color: Colors.white),
+          //   ),
+          //   onTap: () {
+          //     // Navigator.pushNamed(context, '/statistics');
+          //   },
+          // ),
+          // ListTile(
+          //   title: AutoSizeText(
+          //     'All',
+          //     // tr('txt_stats'),
+          //     style: TextStyle(fontSize: 20, color: Colors.white),
+          //     maxLines: 1,
+          //   ),
+          //   leading: ConstrainedBox(
+          //     constraints: BoxConstraints(
+          //       minWidth: 44,
+          //       minHeight: 44,
+          //       maxWidth: 44,
+          //       maxHeight: 44,
+          //     ),
+          //     child: Icon(Icons.list, color: Colors.white),
+          //   ),
+          //   onTap: () {
+          //     // Navigator.pushNamed(context, '/statistics');
+          //   },
+          // ),
+          Padding(padding: EdgeInsets.only(top: 400)),
           ListTile(
             title: AutoSizeText(
               'Profile',

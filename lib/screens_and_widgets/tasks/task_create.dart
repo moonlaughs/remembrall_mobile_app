@@ -6,10 +6,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 ///All the pages needs this to work with material wdgets
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-// import 'package:to_do_application/Models/user.dart';
 import 'package:to_do_application/constants.dart';
 import 'package:to_do_application/local_storage_helper/local_storage_helper.dart';
-import 'package:to_do_application/models/decodedToken.dart';
+
 import 'package:to_do_application/models/tag.dart';
 import 'package:to_do_application/screens_and_widgets/home/custom_app_bar.dart';
 
@@ -30,6 +29,7 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
   final myLocationController = TextEditingController();
   final myPriorityController = TextEditingController();
   final myTagController = TextEditingController();
+  final myTagNameController = TextEditingController();
   var myUserId;
   String username = "";
   Uri url;
@@ -38,7 +38,9 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
   List<Tag> tagsList = [];
   List<String> tagsNames = [];
   Tag tObj = Tag().getInstance();
-  String dropdownValue2 = 'Add a tag';
+  String dropdownValue2 = 'Add tag';
+  String dropdownValueTag = 'Blue';
+  List<String> myColors = ['Blue', 'Green', 'Orange', 'Red'];
 
   @override
   void initState() {
@@ -48,51 +50,12 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
 
   getTags() {
     tagsList = tObj.getTags();
-    tagsNames.add('Add a tag');
+    tagsNames.add(dropdownValue2);
     tagsList.forEach((element) {
       tagsNames.add(element.tagName);
       print(element.tagName);
     });
-
-//     prefs = await SharedPreferences.getInstance();
-// try {
-//       client.badCertificateCallback =
-//           ((X509Certificate cert, String host, int port) => true);
-//       myUserId = prefs.get('userId');
-//         url = Uri.https('10.0.2.2:5001', '/tags/user/' + myUserId);
-//         print(myUserId);
-//         HttpClientRequest request = await client.getUrl(Uri.https('10.0.2.2:5001', '/tags/user/' + myUserId));
-//         // Map<String, String> headers = {};
-//         // headers['content-type'] = 'application/json';
-
-//         // request.headers.set('content-type', 'application/json');
-//         String myBearer = 'Bearer ' + myStorage.getItem('token');
-//         // headers['Authorization'] = myBearer;
-//         request.headers.add('content-type', 'application/json');
-//         // String myBearer = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI1ZmUyNGYzOC0zNjE5LTRlNTEtYmNjMy1kOGNlYTdkYTIwZjMiLCJuYmYiOjE2MjI1NjQzODMsImV4cCI6MTYyMjY1MDc4MywiaWF0IjoxNjIyNTY0MzgzfQ.ERCDSwfmoj7u1TrAvLWv7Cq3cgU94_oSk2d4YHlSjxo';
-//         print(myBearer);
-//         // request.headers.add('Authorization', myBearer);
-//         // request.headers = headers;
-
-//         HttpClientResponse response = await request.close();
-//         print(response.statusCode);
-//         String reply = await response.transform(utf8.decoder).join();
-//         print(reply);
-//         if (response.statusCode == 200) {
-//           setState(() {
-//                        tagsList = (json.decode(reply) as List)
-//               .map((i) => Tag.fromJson(i))
-//               .toList();
-
-//               tagsList.forEach((element) {
-//                 print(element.tagName);
-//                 tagsNames.add(element.tagName);
-//               });
-//                     });
-//         }
-//     } catch (e) {
-//       print(e);
-//     }
+    // tagsNames.add('Create tag');
   }
 
   createTag() async {
@@ -104,16 +67,22 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
     try {
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
-      String tagName = 'new Tag';
+      // String tagName = 'new Tag';
       // String myTime = myTimeController.text;
-      String tagColor = 'green';
+      // String tagColor = 'green';
+      String tagName = myTagNameController.text;
+      int tagColor = myColors.indexOf(dropdownValueTag);
       Map map;
       if (tagName == null || tagColor == null) {
         _showDialog(context,
             'Please fill up required information in order to create a tag');
       } else {
         // if (myPriority == null || myPriority == "") {}
-        map = {"tagName": tagName, "tagColor": tagColor, "fkUserId": myUserId};
+        map = {
+          "tagName": tagName,
+          "tagColor": myColors[tagColor],
+          "fkUserId": myUserId
+        };
         HttpClientRequest request = await client.postUrl(url);
         // Map<String, String> headers = {};
         // headers['content-type'] = 'application/json';
@@ -228,6 +197,8 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
       List<String> myPriorities = ['Choose Priority', 'Low', 'Medium', 'High'];
       int priority = myPriorities.indexOf(dropdownValue);
 
+      int fkTag = myColors.indexOf(dropdownValueTag);
+
       print('drop: $dropdownValue');
       Map map;
       if (myDescription == null || myTag == null) {
@@ -235,15 +206,28 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
             'Please fill up required information in order to create a task\nDescription and Tag is required');
       } else {
         // if (myPriority == null || myPriority == "") {}
-        map = {
-          "description": myDescription,
-          "dateTime": myDate, //"2021-06-01T14:16:14.985Z",
-          "location": myLocation,
-          "priority": priority,
-          "done": false,
-          // "fkTagId": "ae2d605e-2392-4a86-b3a2-bf75c486f332",
-          "fkUserId": myUserId
-        };
+        if (fkTag == 0) {
+          map = {
+            "description": myDescription,
+            "dateTime": myDate, //"2021-06-01T14:16:14.985Z",
+            "location": myLocation,
+            "priority": priority,
+            "done": false,
+            // "fkTagId": "ae2d605e-2392-4a86-b3a2-bf75c486f332",
+            "fkUserId": myUserId
+          };
+        } else {
+          map = {
+            "description": myDescription,
+            "dateTime": myDate, //"2021-06-01T14:16:14.985Z",
+            "location": myLocation,
+            "priority": priority,
+            "done": false,
+            "fkTagId": "ad450d73-edc3-4aff-90c9-0a29a7d05b0a",
+            "fkUserId": myUserId
+          };
+        }
+
         HttpClientRequest request = await client.postUrl(url);
         // Map<String, String> headers = {};
         // headers['content-type'] = 'application/json';
@@ -336,18 +320,55 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          TextField(
-              controller: myDescriptionController,
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.white,
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: TextField(
+                controller: myDescriptionController,
+                obscureText: false,
+                decoration: InputDecoration(
+                    labelText: 'Description',
+                    hintText: "Type description...",
+                    border: InputBorder.none,
+                    fillColor: Colors.transparent,
+                    filled: true)),
+          ),
+          // Divider(
+          //   color: Colors.white,
+          // ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.white,
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: TextField(
+              controller: myLocationController,
               obscureText: false,
               decoration: InputDecoration(
-                  labelText: 'Description',
-                  hintText: "Type description...",
-                  border: InputBorder.none,
-                  fillColor: Colors.transparent,
-                  filled: true)),
-          Divider(
-            color: Colors.white,
+                labelText: 'Location',
+                hintText: "Type location...",
+                border: InputBorder.none,
+                fillColor: Colors.transparent,
+                filled: true,
+                //             border: new UnderlineInputBorder(
+                //   borderSide: new BorderSide(
+                //     color: Colors.red
+                //   )
+                // )
+              ),
+            ),
           ),
           GestureDetector(
               onTap: () {
@@ -365,25 +386,32 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
               },
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText('Pick date and time'),
-              )),
-          Divider(
-            color: Colors.white,
-          ),
-          TextField(
-            controller: myLocationController,
-            obscureText: false,
-            decoration: InputDecoration(
-                labelText: 'Location',
-                hintText: "Type location...",
-                border: InputBorder.none,
-                fillColor: Colors.transparent,
-                filled: true),
-          ),
-          Divider(
-            color: Colors.white,
-          ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: myDateController.text == "" ? "Choose date and time " : myDateController.text,
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black)),
+                        WidgetSpan(
+                          child: Icon(Icons.date_range, size: 24),
+                        ),
+                        // TextSpan(
+                        //   text: " to add",
+                        // ),
+                      ],
+                    ),
+                  )
+                  // AutoSizeText('Pick date and time'),
+                  )),
+          // Divider(
+          //   color: Colors.white,
+          // ),
+
+          // Divider(
+          //   color: Colors.white,
+          // ),
           DropdownButton<String>(
             value: dropdownValue,
             icon: const Icon(Icons.arrow_downward),
@@ -392,7 +420,7 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
             // style: const TextStyle(color: Colors.deepPurple),
             underline: Container(
               height: 2,
-              // color: Colors.deepPurpleAccent,
+              color: Colors.transparent,
             ),
             onChanged: (String newValue) {
               setState(() {
@@ -407,51 +435,35 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
               );
             }).toList(),
           ),
-          // TextField(
-          //     controller: myPriorityController,
-          //     obscureText: false,
-          //     decoration: InputDecoration(
-          //         labelText: 'Priority',
-          //         hintText: "Type priority...",
-          //         border: InputBorder.none,
-          //         fillColor: Colors.transparent,
-          //         filled: true)),
-          Divider(
-            color: Colors.white,
-          ),
-          DropdownButton<String>(
-            value: dropdownValue2,
-            icon: const Icon(Icons.arrow_downward),
-            iconSize: 24,
-            elevation: 16,
-            // style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              // color: Colors.deepPurpleAccent,
+          Container(
+            decoration: BoxDecoration(
+                // border: Border.all(color: Colors.white, width: 3)
+                ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: DropdownButton<String>(
+                value: dropdownValue2,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                // style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  color: Colors.transparent,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue2 = newValue;
+                  });
+                },
+                items: tagsNames.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: 
+                        Text(value)
+                  );
+                }).toList(),
+              ),
             ),
-            onChanged: (String newValue) {
-              setState(() {
-                dropdownValue2 = newValue;
-              });
-            },
-            items: tagsNames.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-          // TextField(
-          //     controller: myTagController,
-          //     obscureText: false,
-          //     decoration: InputDecoration(
-          //         labelText: 'Tag',
-          //         hintText: "Type tag...",
-          //         border: InputBorder.none,
-          //         fillColor: Colors.transparent,
-          //         filled: true)),
-          Divider(
-            color: Colors.white,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
@@ -477,32 +489,9 @@ class _TaskCreateScreen extends State<TaskCreateScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 50.0),
-            child: GestureDetector(
-              onTap: () {
-                createTag();
-              },
-              child: Container(
-                width: buttonWidth,
-                height: buttonHeight,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(100.0)),
-                  color: Colors.teal,
-                ),
-                child: Center(
-                  child: AutoSizeText('Create a new Tag',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                      maxLines: 1),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );
   }
+
 }

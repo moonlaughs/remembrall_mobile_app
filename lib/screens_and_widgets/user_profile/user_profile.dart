@@ -85,11 +85,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   updateUser() async {
     try {
-      if(myPass1Controller.text == myPass2Controller.text || myPass2Controller.text == myPass3Controller.text){
+      if(myPass2Controller.text == myPass3Controller.text && myPass1Controller.text != null){// || myPass2Controller.text == myPass3Controller.text){
       client.badCertificateCallback =
           ((X509Certificate cert, String host, int port) => true);
       HttpClientRequest request = await client.putUrl(url);
-Map map = {"email": myEmailController.text, "password": myPass2Controller.text};
+Map map = {"email": myEmailController.text, "newPassword": myPass2Controller.text, "currentPassword": myPass1Controller.text};
       String myBearer = 'Bearer ' + myStorage.getItem('token');
       request.headers.set('Authorization', myBearer);
 request.headers.set('content-type', 'application/json');
@@ -170,220 +170,222 @@ request.headers.set('content-type', 'application/json');
         backgroundColor: Colors.cyan,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              color: Colors.cyan,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      width: 100.0,
-                      height: 100.0,
-                      decoration: new BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: new AssetImage(
-                                'assets/otherImages/girl.png',
-                              )
-                              // new NetworkImage(
-                              //     "https://i.imgur.com/BoN9kdC.png")
-                              ))),
-                  Padding(padding: EdgeInsets.only(top: 8)),
-                  Text(
-                    username,
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: Colors.white,
-              height: MediaQuery.of(context).size.height / (1.95),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                color: Colors.cyan,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 3,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextField(
-                        controller: myEmailController,
-                        enabled: !_disabled,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                            labelText: _disabled ? "Email" : 'Email',
-                            hintText: _disabled
-                                ? "iza@mial45.com"
-                                : "iza@mial45.com you can change here",
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true)),
-                    Divider(
-                      color: Colors.grey,
+                    Container(
+                        width: 100.0,
+                        height: 100.0,
+                        decoration: new BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: new AssetImage(
+                                  'assets/otherImages/girl.png',
+                                )
+                                // new NetworkImage(
+                                //     "https://i.imgur.com/BoN9kdC.png")
+                                ))),
+                    Padding(padding: EdgeInsets.only(top: 8)),
+                    Text(
+                      username,
+                      style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
-                    _disabled ? TextField(
-                        controller: myPassController,
-                        enabled: !_disabled,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            labelText: 'Password',
-                            hintText: "Password",
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true)) : 
-                            Column(
-                              children: [
-                                TextField(
-                        controller: myPass1Controller,
-                        enabled: !_disabled,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                                labelText: 'Old Password',
-                                hintText: "Write your old password",
-                                border: InputBorder.none,
-                                fillColor: Colors.white,
-                                filled: true)),
-                                Divider(
-                      color: Colors.grey,
-                    ),
-                                TextField(
-                        controller: myPass2Controller,
-                        enabled: !_disabled,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                                labelText: 'New Password',
-                                hintText: "Write your new password",
-                                border: InputBorder.none,
-                                fillColor: Colors.white,
-                                filled: true)),
-                                Divider(
-                      color: Colors.grey,
-                    ),
-                                TextField(
-                        controller: myPass3Controller,
-                        enabled: !_disabled,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                                labelText: 'Confirm New Password',
-                                hintText: 
-                                    "Confirm your new password",
-                                border: InputBorder.none,
-                                fillColor: Colors.white,
-                                filled: true)),
-                              ],
-                            ),
-                    Divider(
-                      color: Colors.grey,
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 20)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            deleteUser();
-                          },
-                          child: Container(
-                            width: buttonWidth,
-                            height: buttonHeight,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100.0)),
-                              color: Colors.red,
-                            ),
-                            child: Center(
-                              child: AutoSizeText('Delete Profile',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                  maxLines: 1),
-                            ),
-                          ),
-                        ),
-                        _disabled ? GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _disabled = !_disabled;
-                            });
-                          },
-                          child: Container(
-                            width: buttonWidth,
-                            height: buttonHeight,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100.0)),
-                              color: Colors.teal,
-                            ),
-                            child: Center(
-                              child: AutoSizeText('Update Profile',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                  maxLines: 1),
-                            ),
-                          ),
-                        ):
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              updateUser();
-                              _disabled = !_disabled;
-                            });
-                          },
-                          child: Container(
-                            width: buttonWidth,
-                            height: buttonHeight,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100.0)),
-                              color: Colors.teal,
-                            ),
-                            child: Center(
-                              child: AutoSizeText('Save Changes',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                  maxLines: 1),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(top:20)),
-                    GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(Constants.LOGIN_SCREEN, (Route<dynamic> route) => false);
-                          },
-                          child: Container(
-                            width: buttonWidth,
-                            height: buttonHeight,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100.0)),
-                              color: Colors.cyan,
-                            ),
-                            child: Center(
-                              child: AutoSizeText('Log Out',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                  maxLines: 1),
-                            ),
-                          ),
-                        ),
                   ],
                 ),
               ),
-            )
-          ],
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * 0.6, /// (1.95),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextField(
+                          controller: myEmailController,
+                          enabled: !_disabled,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              labelText: _disabled ? "Email" : 'Email',
+                              hintText: _disabled
+                                  ? "iza@mial45.com"
+                                  : "iza@mial45.com you can change here",
+                              border: InputBorder.none,
+                              fillColor: Colors.white,
+                              filled: true)),
+                      Divider(
+                        color: Colors.grey,
+                      ),
+                      _disabled ? TextField(
+                          controller: myPassController,
+                          enabled: !_disabled,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              labelText: 'Password',
+                              hintText: "Password",
+                              border: InputBorder.none,
+                              fillColor: Colors.white,
+                              filled: true)) : 
+                              Column(
+                                children: [
+                                  TextField(
+                          controller: myPass1Controller,
+                          enabled: !_disabled,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                                  labelText: 'Old Password',
+                                  hintText: "Write your old password",
+                                  border: InputBorder.none,
+                                  fillColor: Colors.white,
+                                  filled: true)),
+                                  Divider(
+                        color: Colors.grey,
+                      ),
+                                  TextField(
+                          controller: myPass2Controller,
+                          enabled: !_disabled,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                                  labelText: 'New Password',
+                                  hintText: "Write your new password",
+                                  border: InputBorder.none,
+                                  fillColor: Colors.white,
+                                  filled: true)),
+                                  Divider(
+                        color: Colors.grey,
+                      ),
+                                  TextField(
+                          controller: myPass3Controller,
+                          enabled: !_disabled,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                                  labelText: 'Confirm New Password',
+                                  hintText: 
+                                      "Confirm your new password",
+                                  border: InputBorder.none,
+                                  fillColor: Colors.white,
+                                  filled: true)),
+                                ],
+                              ),
+                      Divider(
+                        color: Colors.grey,
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 20)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              deleteUser();
+                            },
+                            child: Container(
+                              width: buttonWidth,
+                              height: buttonHeight,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100.0)),
+                                color: Colors.red,
+                              ),
+                              child: Center(
+                                child: AutoSizeText('Delete Profile',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                    maxLines: 1),
+                              ),
+                            ),
+                          ),
+                          _disabled ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _disabled = !_disabled;
+                              });
+                            },
+                            child: Container(
+                              width: buttonWidth,
+                              height: buttonHeight,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100.0)),
+                                color: Colors.teal,
+                              ),
+                              child: Center(
+                                child: AutoSizeText('Update Profile',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                    maxLines: 1),
+                              ),
+                            ),
+                          ):
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                updateUser();
+                                _disabled = !_disabled;
+                              });
+                            },
+                            child: Container(
+                              width: buttonWidth,
+                              height: buttonHeight,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100.0)),
+                                color: Colors.teal,
+                              ),
+                              child: Center(
+                                child: AutoSizeText('Save Changes',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                    maxLines: 1),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top:20)),
+                      GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(Constants.LOGIN_SCREEN, (Route<dynamic> route) => false);
+                            },
+                            child: Container(
+                              width: buttonWidth,
+                              height: buttonHeight,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100.0)),
+                                color: Colors.cyan,
+                              ),
+                              child: Center(
+                                child: AutoSizeText('Log Out',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                    maxLines: 1),
+                              ),
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
